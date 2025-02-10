@@ -6,6 +6,7 @@ import ContentForm from "@/components/ContentForm";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
+import { generateContent } from "@/api/generate";
 
 const Index = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -68,21 +69,8 @@ const Index = () => {
     setIsGenerating(true);
     try {
       const prompt = generatePrompt(selectedType!, data);
-      
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to generate content");
-      }
-
-      const result = await response.json();
-      setGeneratedContent(result.generatedText);
+      const generatedText = await generateContent(prompt);
+      setGeneratedContent(generatedText);
       
       toast({
         title: "Success!",
@@ -187,4 +175,3 @@ const Index = () => {
 };
 
 export default Index;
-
