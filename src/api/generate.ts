@@ -13,7 +13,7 @@ export const generateContent = async (prompt: string) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-3.5-turbo',
         messages: [
           { 
             role: 'system', 
@@ -25,7 +25,8 @@ export const generateContent = async (prompt: string) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to generate content');
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || 'Failed to generate content');
     }
 
     const data = await response.json();
