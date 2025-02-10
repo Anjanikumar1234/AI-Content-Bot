@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 const Index = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [generatedContent, setGeneratedContent] = useState<string>("");
+  const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
 
   const contentTypes = [
@@ -39,13 +40,64 @@ const Index = () => {
     },
   ];
 
+  const generatePrompt = (type: string, data: any) => {
+    switch (type) {
+      case "email":
+        return `Write a ${data.tone || "professional"} email from ${data.senderName || "sender"} to ${data.receiverName || "receiver"} that is ${data.length || "medium"} in length. Type: ${data.emailType || "compose"}. Content context: ${data.content}`;
+      case "essay":
+        return `Write a ${data.essayType || "simple"} essay that is ${data.length || "medium"} in length about: ${data.content}`;
+      case "social":
+        return `Write a ${data.style || "professional"} social media post for ${data.platform || "LinkedIn"} that is ${data.length || "medium"} in length about: ${data.content}`;
+      case "text":
+        return `${data.textType || "Summarize"} the following text to be ${data.length || "medium"} in length: ${data.content}`;
+      default:
+        return data.content;
+    }
+  };
+
   const handleFormSubmit = async (data: any) => {
-    // Here we'll integrate with an AI service later
-    toast({
-      title: "Success!",
-      description: "Your content has been generated.",
-    });
-    setGeneratedContent("Sample generated content based on your inputs...");
+    if (!data.content) {
+      toast({
+        title: "Error",
+        description: "Please provide content or context for generation",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const prompt = generatePrompt(selectedType!, data);
+      
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate content");
+      }
+
+      const result = await response.json();
+      setGeneratedContent(result.generatedText);
+      
+      toast({
+        title: "Success!",
+        description: "Your content has been generated.",
+      });
+    } catch (error) {
+      console.error("Error generating content:", error);
+      toast({
+        title: "Error",
+        description: "Failed to generate content. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const copyToClipboard = () => {
@@ -112,8 +164,12 @@ const Index = () => {
                 )}
               </div>
               <div className="prose max-w-none">
-                {generatedContent ? (
-                  <div className="bg-white/50 p-4 rounded-lg min-h-[200px]">
+                {isGenerating ? (
+                  <div className="text-center text-gray-500 min-h-[200px] flex items-center justify-center">
+                    Generating content...
+                  </div>
+                ) : generatedContent ? (
+                  <div className="bg-white/50 p-4 rounded-lg min-h-[200px] whitespace-pre-wrap">
                     {generatedContent}
                   </div>
                 ) : (
@@ -131,3 +187,4 @@ const Index = () => {
 };
 
 export default Index;
+
