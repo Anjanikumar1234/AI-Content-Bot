@@ -41,57 +41,95 @@
 }
 
 .glass-card {
-  @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)];
+  @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(255, 255, 255, 0.1) inset,
+    0 -2px 8px rgba(0, 0, 0, 0.2) inset;
 }
 
 .content-card {
   @apply p-6 rounded-lg transition-all duration-300;
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.3));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.1),
+    rgba(0, 0, 0, 0.3)
+  );
+  box-shadow:
+    0 4px 32px rgba(0, 0, 0, 0.4),
+    0 2px 16px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(12px);
-}
-
-.content-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 0 20px rgba(255, 255, 255, 0.1),
-    0 0 40px rgba(255, 255, 255, 0.05);
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.4));
 }
 
 .input-field {
   @apply w-full px-4 py-2 rounded-lg bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300 text-white placeholder-white/50;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 1px 3px rgba(255, 255, 255, 0.1) inset;
 }
 
 .select-field {
   @apply w-full px-4 py-2 rounded-lg bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300 text-white;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    0 1px 3px rgba(255, 255, 255, 0.1) inset;
 }
 
-.lightning-effect {
-  position: relative;
-  overflow: hidden;
+@keyframes lightning {
+  0%, 100% { 
+    opacity: 0;
+    transform: scale(0.8) translateY(1px);
+  }
+  3%, 7% { 
+    opacity: 1;
+    transform: scale(1.1) translateY(0);
+  }
+  10% {
+    opacity: 0;
+    transform: scale(0.9) translateY(1px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    opacity: 0.5;
+    filter: blur(20px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(15px);
+  }
 }
 
 .lightning-effect::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
   background: radial-gradient(
     circle,
-    transparent 20%,
-    rgba(255, 255, 255, 0.1) 40%,
+    rgba(255, 255, 255, 0.1) 10%,
     transparent 70%
   );
-  animation: lightning 8s linear infinite;
+  animation: lightning 8s infinite;
+}
+
+.glow-effect {
+  position: relative;
+}
+
+.glow-effect::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(to right, white, transparent);
+  filter: blur(15px);
   opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-@keyframes lightning {
-  0%, 100% { opacity: 0; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1); }
+.glow-effect:hover::after {
+  opacity: 0.5;
 }
-

@@ -97,8 +97,18 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#2D1B69] p-8">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+    <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#000000] p-8 relative overflow-hidden">
+      {/* Animated background grid with perspective */}
+      <div 
+        className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20"
+        style={{
+          transform: "perspective(1000px) rotateX(2deg)",
+          backgroundSize: "50px 50px",
+        }}
+      />
+      
+      {/* Dynamic lighting overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-white/5 pointer-events-none" />
       
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -111,16 +121,16 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-lg"
           >
-            <Sparkles className="w-4 h-4 text-purple-400" />
+            <Sparkles className="w-4 h-4 text-white" />
             <span className="text-sm text-white/80">AI-Powered Content Generation</span>
           </motion.div>
           
-          <h1 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
+          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/80">
             Personalized Content Generator
           </h1>
-          <p className="text-lg text-white/60">
+          <p className="text-lg text-white/60 max-w-2xl mx-auto">
             Create tailored content for any purpose with our AI-powered assistant
           </p>
         </div>
@@ -196,4 +206,3 @@ const Index = () => {
 };
 
 export default Index;
-
