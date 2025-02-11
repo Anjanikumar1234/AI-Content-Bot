@@ -6,10 +6,17 @@ const corsHeaders = {
 
 export const generateContent = async (prompt: string) => {
   try {
+    // Get the API key from environment variables
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    
+    if (!apiKey) {
+      throw new Error('OpenAI API key is not configured. Please add your API key in the project settings.');
+    }
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
