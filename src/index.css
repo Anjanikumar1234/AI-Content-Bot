@@ -7,25 +7,25 @@
  
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
+    --card: 0 0% 0%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 0 0% 0%;
     --popover-foreground: 0 0% 98%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 3.7% 15.9%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 9%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
+    --muted: 0 0% 9%;
+    --muted-foreground: 0 0% 64.9%;
+    --accent: 0 0% 9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 262 83% 58%;
+    --border: 0 0% 9%;
+    --input: 0 0% 9%;
+    --ring: 0 0% 100%;
     --radius: 0.75rem;
   }
 }
@@ -46,23 +46,52 @@
 
 .content-card {
   @apply p-6 rounded-lg transition-all duration-300;
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.3));
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(12px);
 }
 
 .content-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.1),
+    0 0 40px rgba(255, 255, 255, 0.05);
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.4));
 }
 
 .input-field {
-  @apply w-full px-4 py-2 rounded-lg bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-white placeholder-white/50;
+  @apply w-full px-4 py-2 rounded-lg bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300 text-white placeholder-white/50;
 }
 
 .select-field {
-  @apply w-full px-4 py-2 rounded-lg bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 text-white;
+  @apply w-full px-4 py-2 rounded-lg bg-black/20 border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-300 text-white;
+}
+
+.lightning-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.lightning-effect::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    transparent 20%,
+    rgba(255, 255, 255, 0.1) 40%,
+    transparent 70%
+  );
+  animation: lightning 8s linear infinite;
+  opacity: 0;
+}
+
+@keyframes lightning {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
 }
 

@@ -17,19 +17,19 @@ const ContentTypeCard = ({ title, description, icon, onClick, isSelected }: Cont
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       whileHover={{ scale: 1.02 }}
-      className="relative group"
+      className="relative group lightning-effect"
     >
       <div
-        className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+        className="absolute -inset-0.5 bg-gradient-to-r from-white/20 to-black/20 rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
       />
       <Card
         className={`content-card cursor-pointer relative ${
-          isSelected ? "ring-2 ring-purple-500" : ""
+          isSelected ? "ring-2 ring-white/50" : ""
         }`}
         onClick={onClick}
       >
         <div className="flex flex-col items-center text-center gap-4">
-          <div className="text-4xl text-purple-400 group-hover:text-purple-300 transition-colors">
+          <div className="text-4xl text-white group-hover:text-white/90 transition-colors">
             {icon}
           </div>
           <div>
