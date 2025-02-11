@@ -17,7 +17,7 @@ const ContentTypeCard = ({ title, description, icon, onClick, isSelected }: Cont
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       whileHover={{ scale: 1.05, rotateX: 2, rotateY: 2 }}
-      className="relative group"
+      className="relative group w-full h-full"
     >
       {/* Lightning effect overlay */}
       <div className="absolute -inset-[1px] bg-gradient-to-r from-white/10 via-white/5 to-black/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -26,7 +26,7 @@ const ContentTypeCard = ({ title, description, icon, onClick, isSelected }: Cont
       <div className="absolute -inset-0.5 bg-gradient-to-r from-white/20 to-black/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
 
       <Card
-        className={`relative border-0 overflow-hidden backdrop-blur-xl ${
+        className={`relative border-0 overflow-hidden backdrop-blur-xl h-[280px] ${
           isSelected ? "ring-2 ring-white/50" : ""
         }`}
         onClick={onClick}
@@ -35,7 +35,7 @@ const ContentTypeCard = ({ title, description, icon, onClick, isSelected }: Cont
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20" />
         
         {/* Content with pseudo-3D transform */}
-        <div className="relative p-6 transition-transform duration-300 group-hover:transform group-hover:translate-y-[-2px]">
+        <div className="relative p-6 transition-transform duration-300 group-hover:transform group-hover:translate-y-[-2px] h-full flex flex-col justify-center">
           <div className="flex flex-col items-center text-center gap-4">
             {/* Icon with glow effect */}
             <div className="text-4xl text-white relative">
