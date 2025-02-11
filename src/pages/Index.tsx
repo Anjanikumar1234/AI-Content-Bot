@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Mail, BookText, Share2, Type } from "lucide-react";
+import { Mail, BookText, Share2, Type, Sparkles } from "lucide-react";
 import ContentTypeCard from "@/components/ContentTypeCard";
 import ContentForm from "@/components/ContentForm";
 import { Button } from "@/components/ui/button";
@@ -97,16 +97,30 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary to-background p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#2D1B69] p-8">
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-6xl mx-auto"
+        className="max-w-6xl mx-auto relative"
       >
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Personalized Content Generator</h1>
-          <p className="text-lg text-gray-600">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6"
+          >
+            <Sparkles className="w-4 h-4 text-purple-400" />
+            <span className="text-sm text-white/80">AI-Powered Content Generation</span>
+          </motion.div>
+          
+          <h1 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
+            Personalized Content Generator
+          </h1>
+          <p className="text-lg text-white/60">
             Create tailored content for any purpose with our AI-powered assistant
           </p>
         </div>
@@ -128,13 +142,13 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="glass-card p-6 rounded-lg">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-2xl font-semibold text-white">
                   {contentTypes.find((t) => t.id === selectedType)?.title}
                 </h2>
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedType(null)}
-                  className="text-gray-500"
+                  className="text-white/60 hover:text-white hover:bg-white/10"
                 >
                   Change Type
                 </Button>
@@ -144,24 +158,31 @@ const Index = () => {
 
             <div className="glass-card p-6 rounded-lg">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold">Generated Content</h2>
+                <h2 className="text-2xl font-semibold text-white">Generated Content</h2>
                 {generatedContent && (
-                  <Button onClick={copyToClipboard} variant="outline">
+                  <Button onClick={copyToClipboard} variant="outline" className="border-white/10 hover:bg-white/10">
                     Copy
                   </Button>
                 )}
               </div>
-              <div className="prose max-w-none">
+              <div className="prose prose-invert max-w-none">
                 {isGenerating ? (
-                  <div className="text-center text-gray-500 min-h-[200px] flex items-center justify-center">
+                  <div className="text-center text-white/60 min-h-[200px] flex items-center justify-center">
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                      className="mr-2"
+                    >
+                      <Sparkles className="w-5 h-5" />
+                    </motion.div>
                     Generating content...
                   </div>
                 ) : generatedContent ? (
-                  <div className="bg-white/50 p-4 rounded-lg min-h-[200px] whitespace-pre-wrap">
+                  <div className="bg-white/5 p-4 rounded-lg min-h-[200px] whitespace-pre-wrap text-white/90">
                     {generatedContent}
                   </div>
                 ) : (
-                  <div className="text-center text-gray-500 min-h-[200px] flex items-center justify-center">
+                  <div className="text-center text-white/60 min-h-[200px] flex items-center justify-center">
                     Generated content will appear here
                   </div>
                 )}
@@ -175,3 +196,4 @@ const Index = () => {
 };
 
 export default Index;
+
