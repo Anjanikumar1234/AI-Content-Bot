@@ -205,29 +205,33 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
         </>
       )}
 
-      <div className="space-y-2">
-        <Label>Content Length</Label>
-        <Select onValueChange={(value) => handleChange("length", value)}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select length" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="short">Short (~150 words)</SelectItem>
-            <SelectItem value="medium">Medium (~350 words)</SelectItem>
-            <SelectItem value="long">Long (~500 words)</SelectItem>
-            <SelectItem value="extensive">Extensive (~800+ words)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {type !== "image" && (
+        <div className="space-y-2">
+          <Label>Content Length</Label>
+          <Select onValueChange={(value) => handleChange("length", value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select length" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="short">Short (~150 words)</SelectItem>
+              <SelectItem value="medium">Medium (~350 words)</SelectItem>
+              <SelectItem value="long">Long (~500 words)</SelectItem>
+              <SelectItem value="extensive">Extensive (~800+ words)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
-      <div className="space-y-2">
-        <Label>Content</Label>
-        <textarea
-          className="input-field min-h-[150px]"
-          placeholder="Enter your content or prompt here..."
-          onChange={(e) => handleChange("content", e.target.value)}
-        />
-      </div>
+      {type !== "image" && (
+        <div className="space-y-2">
+          <Label>Content</Label>
+          <textarea
+            className="input-field min-h-[150px]"
+            placeholder="Enter your content or prompt here..."
+            onChange={(e) => handleChange("content", e.target.value)}
+          />
+        </div>
+      )}
 
       <Button type="submit" className="w-full">
         Generate Content
