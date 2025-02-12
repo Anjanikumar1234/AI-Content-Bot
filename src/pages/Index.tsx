@@ -21,6 +21,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { getTranslation } from "@/utils/translations";
+import HomePage from "@/components/HomePage";
 
 const Index = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -163,153 +165,132 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#000000] p-8 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10">
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
-      </div>
-
-      <div className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
+    <div className="min-h-screen bg-[#141414] p-8 relative overflow-hidden">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black via-black/90 to-transparent">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-8">
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center space-x-8"
-              >
-                <Button variant="ghost" className="text-white gap-2">
-                  <Home className="w-5 h-5" />
-                  Home
+          <div className="flex items-center space-x-8">
+            <Button variant="ghost" className="text-white gap-2">
+              <Home className="w-5 h-5" />
+              {getTranslation("navigation", "home", selectedLanguage)}
+            </Button>
+            
+            <Button variant="ghost" className="text-white gap-2">
+              <Sparkles className="w-5 h-5" />
+              {getTranslation("navigation", "generations", selectedLanguage)}
+            </Button>
+
+            <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+              <SelectTrigger className="w-[180px] bg-white/5 border-white/10">
+                <Globe className="w-4 h-4 mr-2" />
+                <SelectValue placeholder={getTranslation("navigation", "language", selectedLanguage)} />
+              </SelectTrigger>
+              <SelectContent>
+                {languages.map((lang) => (
+                  <SelectItem key={lang.value} value={lang.value}>
+                    {lang.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" className="gap-2">
+                  <History className="w-4 h-4" />
+                  {getTranslation("navigation", "history", selectedLanguage)}
                 </Button>
-                <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                  <SelectTrigger className="w-[180px] bg-white/5 border-white/10">
-                    <Globe className="w-4 h-4 mr-2" />
-                    <SelectValue placeholder="Select language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {languages.map((lang) => (
-                      <SelectItem key={lang.value} value={lang.value}>
-                        {lang.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="ghost" className="gap-2">
-                      <History className="w-4 h-4" />
-                      {getTranslation("history")}
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent>
-                    <SheetHeader>
-                      <SheetTitle>{getTranslation("searchHistory")}</SheetTitle>
-                      <SheetDescription>
-                        {getTranslation("recentRequests")}
-                      </SheetDescription>
-                    </SheetHeader>
-                    <div className="mt-4 space-y-4">
-                      {searchHistory.map((item, index) => (
-                        <div key={index} className="p-4 rounded-lg bg-white/5">
-                          <div className="font-medium text-white">{getTranslation(item.type)}</div>
-                          <div className="text-sm text-white/60 mt-1">{item.content}</div>
-                          <div className="text-xs text-white/40 mt-1">
-                            {new Date(item.timestamp).toLocaleString()}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </SheetContent>
-                </Sheet>
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <Button variant="ghost" className="gap-2">
-                      <Info className="w-4 h-4" />
-                      {getTranslation("contact")}
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent>
-                    <SheetHeader>
-                      <SheetTitle>{getTranslation("contactInfo")}</SheetTitle>
-                      <SheetDescription>
-                        {getTranslation("contactDescription")}
-                      </SheetDescription>
-                    </SheetHeader>
-                    <div className="mt-4 space-y-4">
-                      <div className="flex items-center gap-2">
-                        <Mail className="w-4 h-4" />
-                        <a href="mailto:pallapoluanjanikumar@gmail.com" className="text-blue-400 hover:underline">
-                          pallapoluanjanikumar@gmail.com
-                        </a>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Phone className="w-4 h-4" />
-                        <a href="tel:+918125436681" className="text-blue-400 hover:underline">
-                          +91 8125436681
-                        </a>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>{getTranslation("navigation", "searchHistory", selectedLanguage)}</SheetTitle>
+                  <SheetDescription>
+                    {getTranslation("navigation", "recentRequests", selectedLanguage)}
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-4 space-y-4">
+                  {searchHistory.map((item, index) => (
+                    <div key={index} className="p-4 rounded-lg bg-white/5">
+                      <div className="font-medium text-white">{getTranslation(item.type)}</div>
+                      <div className="text-sm text-white/60 mt-1">{item.content}</div>
+                      <div className="text-xs text-white/40 mt-1">
+                        {new Date(item.timestamp).toLocaleString()}
                       </div>
                     </div>
-                  </SheetContent>
-                </Sheet>
-              </motion.div>
-            </div>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" className="gap-2">
+                  <Info className="w-4 h-4" />
+                  {getTranslation("navigation", "contact", selectedLanguage)}
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>{getTranslation("navigation", "contactInfo", selectedLanguage)}</SheetTitle>
+                  <SheetDescription>
+                    {getTranslation("navigation", "contactDescription", selectedLanguage)}
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-4 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    <a href="mailto:pallapoluanjanikumar@gmail.com" className="text-blue-400 hover:underline">
+                      pallapoluanjanikumar@gmail.com
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    <a href="tel:+918125436681" className="text-blue-400 hover:underline">
+                      +91 8125436681
+                    </a>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-6xl mx-auto relative pt-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="max-w-7xl mx-auto pt-20"
       >
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-lg"
-          >
-            <Sparkles className="w-4 h-4 text-white" />
-            <span className="text-sm text-white/80">{getTranslation("aiPowered")}</span>
-          </motion.div>
-          
-          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/80">
-            {getTranslation("title")}
-          </h1>
-          <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            {getTranslation("description")}
-          </p>
-        </div>
-
         {!selectedType ? (
-          <div className="grid grid-cols-3 gap-6 mb-6">
-            {contentTypes.slice(0, 3).map((type) => (
-              <ContentTypeCard
-                key={type.id}
-                title={getTranslation(type.id)}
-                description={getTranslation(`${type.id}Description`)}
-                icon={type.icon}
-                onClick={() => setSelectedType(type.id)}
-                isSelected={selectedType === type.id}
-              />
-            ))}
-          </div>
+          <HomePage selectedLanguage={selectedLanguage} />
         ) : null}
 
         {!selectedType ? (
-          <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {contentTypes.slice(3).map((type) => (
-              <ContentTypeCard
-                key={type.id}
-                title={getTranslation(type.id)}
-                description={getTranslation(`${type.id}Description`)}
-                icon={type.icon}
-                onClick={() => setSelectedType(type.id)}
-                isSelected={selectedType === type.id}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-3 gap-6 mb-6">
+              {contentTypes.slice(0, 3).map((type) => (
+                <ContentTypeCard
+                  key={type.id}
+                  title={getTranslation("content", type.id, selectedLanguage)}
+                  description={getTranslation("content", `${type.id}Desc`, selectedLanguage)}
+                  icon={type.icon}
+                  onClick={() => setSelectedType(type.id)}
+                  isSelected={selectedType === type.id}
+                />
+              ))}
+            </div>
+            <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {contentTypes.slice(3).map((type) => (
+                <ContentTypeCard
+                  key={type.id}
+                  title={getTranslation("content", type.id, selectedLanguage)}
+                  description={getTranslation("content", `${type.id}Desc`, selectedLanguage)}
+                  icon={type.icon}
+                  onClick={() => setSelectedType(type.id)}
+                  isSelected={selectedType === type.id}
+                />
+              ))}
+            </div>
+          </>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="glass-card p-6 rounded-lg">
