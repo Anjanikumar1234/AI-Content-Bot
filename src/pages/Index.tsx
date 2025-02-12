@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Home, Mail, BookText, Share2, Type, Sparkles, Globe, History, Image, Info, Phone } from "lucide-react";
+import { Mail, BookText, Share2, Type, Sparkles, Globe, History, Image, Info, Phone } from "lucide-react";
 import ContentTypeCard from "@/components/ContentTypeCard";
 import ContentForm from "@/components/ContentForm";
 import { Button } from "@/components/ui/button";
@@ -22,8 +21,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { getTranslation } from "@/utils/translations";
-import HomePage from "@/components/HomePage";
 
 const Index = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -68,36 +65,18 @@ const Index = () => {
 
   const languages = [
     { value: "english", label: "English" },
-    { value: "hindi", label: "हिन्दी (Hindi)" },
-    { value: "telugu", label: "తెలుగు (Telugu)" },
-    { value: "tamil", label: "தமிழ் (Tamil)" },
-    { value: "kannada", label: "ಕನ್ನಡ (Kannada)" },
-    { value: "malayalam", label: "മലയാളം (Malayalam)" },
-    { value: "marathi", label: "मराठी (Marathi)" },
-    { value: "punjabi", label: "ਪੰਜਾਬੀ (Punjabi)" },
-    { value: "gujarati", label: "ગુજરાતી (Gujarati)" },
-    { value: "bengali", label: "বাংলা (Bengali)" },
+    { value: "spanish", label: "Español" },
+    { value: "french", label: "Français" },
+    { value: "german", label: "Deutsch" },
+    { value: "italian", label: "Italiano" },
+    { value: "portuguese", label: "Português" },
+    { value: "russian", label: "Русский" },
+    { value: "chinese", label: "中文" },
+    { value: "japanese", label: "日本語" },
+    { value: "korean", label: "한국어" },
+    { value: "arabic", label: "العربية" },
+    { value: "hindi", label: "हिन्दी" },
   ];
-
-  const translations: { [key: string]: { [key: string]: string } } = {
-    "email": {
-      "english": "Email Generation",
-      "hindi": "ईमेल जनरेशन",
-      "telugu": "ఇమెయిల్ జనరేషన్",
-      // Add translations for other languages
-    },
-    "essay": {
-      "english": "Essay Writing",
-      "hindi": "निबंध लेखन",
-      "telugu": "వ్యాస రచన",
-      // Add translations for other languages
-    },
-    // Add translations for other content types
-  };
-
-  const getTranslation = (key: string) => {
-    return translations[key]?.[selectedLanguage] || translations[key]?.["english"] || key;
-  };
 
   const generatePrompt = (type: string, data: any) => {
     const languagePrompt = selectedLanguage !== "english" ? `Translate the following to ${selectedLanguage}: ` : "";
@@ -166,24 +145,31 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#141414] p-8 relative overflow-hidden">
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black via-black/90 to-transparent">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center space-x-8">
-            <Button variant="ghost" className="text-white gap-2">
-              <Home className="w-5 h-5" />
-              {getTranslation("home", selectedLanguage)}
-            </Button>
-            
-            <Button variant="ghost" className="text-white gap-2">
-              <Sparkles className="w-5 h-5" />
-              {getTranslation("generations", selectedLanguage)}
-            </Button>
-
+    <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#000000] p-8 relative overflow-hidden">
+      {/* Animated background grid with perspective */}
+      <div 
+        className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20"
+        style={{
+          transform: "perspective(1000px) rotateX(2deg)",
+          backgroundSize: "50px 50px",
+        }}
+      />
+      
+      {/* Dynamic lighting overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-white/5 pointer-events-none" />
+      
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-6xl mx-auto relative"
+      >
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
               <SelectTrigger className="w-[180px] bg-white/5 border-white/10">
                 <Globe className="w-4 h-4 mr-2" />
-                <SelectValue placeholder={getTranslation("language", selectedLanguage)} />
+                <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent>
                 {languages.map((lang) => (
@@ -196,22 +182,22 @@ const Index = () => {
 
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" className="gap-2">
+                <Button variant="outline" className="gap-2">
                   <History className="w-4 h-4" />
-                  {getTranslation("history", selectedLanguage)}
+                  History
                 </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>{getTranslation("searchHistory", selectedLanguage)}</SheetTitle>
+                  <SheetTitle>Search History</SheetTitle>
                   <SheetDescription>
-                    {getTranslation("recentRequests", selectedLanguage)}
+                    Your recent content generation requests
                   </SheetDescription>
                 </SheetHeader>
                 <div className="mt-4 space-y-4">
                   {searchHistory.map((item, index) => (
                     <div key={index} className="p-4 rounded-lg bg-white/5">
-                      <div className="font-medium text-white">{getTranslation(item.type, selectedLanguage)}</div>
+                      <div className="font-medium text-white">{item.type}</div>
                       <div className="text-sm text-white/60 mt-1">{item.content}</div>
                       <div className="text-xs text-white/40 mt-1">
                         {new Date(item.timestamp).toLocaleString()}
@@ -224,16 +210,16 @@ const Index = () => {
 
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" className="gap-2">
+                <Button variant="outline" className="gap-2">
                   <Info className="w-4 h-4" />
-                  {getTranslation("contact", selectedLanguage)}
+                  Contact
                 </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>{getTranslation("contactInfo", selectedLanguage)}</SheetTitle>
+                  <SheetTitle>Contact Information</SheetTitle>
                   <SheetDescription>
-                    {getTranslation("contactDescription", selectedLanguage)}
+                    Get in touch for support or queries
                   </SheetDescription>
                 </SheetHeader>
                 <div className="mt-4 space-y-4">
@@ -254,57 +240,52 @@ const Index = () => {
             </Sheet>
           </div>
         </div>
-      </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="max-w-7xl mx-auto pt-20"
-      >
-        {!selectedType ? (
-          <HomePage selectedLanguage={selectedLanguage} />
-        ) : null}
+        <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-lg"
+          >
+            <Sparkles className="w-4 h-4 text-white" />
+            <span className="text-sm text-white/80">AI-Powered Content Generation</span>
+          </motion.div>
+          
+          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/80">
+            Personalized Content Generator
+          </h1>
+          <p className="text-lg text-white/60 max-w-2xl mx-auto">
+            Create tailored content for any purpose with our AI-powered assistant
+          </p>
+        </div>
 
         {!selectedType ? (
-          <>
-            <div className="grid grid-cols-3 gap-6 mb-6">
-              {contentTypes.slice(0, 3).map((type) => (
-                <ContentTypeCard
-                  key={type.id}
-                  title={getTranslation(type.id, selectedLanguage)}
-                  description=""
-                  icon={type.icon}
-                  onClick={() => setSelectedType(type.id)}
-                  isSelected={selectedType === type.id}
-                />
-              ))}
-            </div>
-            <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {contentTypes.slice(3).map((type) => (
-                <ContentTypeCard
-                  key={type.id}
-                  title={getTranslation(type.id, selectedLanguage)}
-                  description=""
-                  icon={type.icon}
-                  onClick={() => setSelectedType(type.id)}
-                  isSelected={selectedType === type.id}
-                />
-              ))}
-            </div>
-          </>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {contentTypes.map((type) => (
+              <ContentTypeCard
+                key={type.id}
+                title={type.title}
+                description={type.description}
+                icon={type.icon}
+                onClick={() => setSelectedType(type.id)}
+                isSelected={selectedType === type.id}
+              />
+            ))}
+          </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="glass-card p-6 rounded-lg">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold text-white">
-                  {getTranslation(selectedType, selectedLanguage)}
+                  {contentTypes.find((t) => t.id === selectedType)?.title}
                 </h2>
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedType(null)}
                   className="text-white/60 hover:text-white hover:bg-white/10"
                 >
-                  {getTranslation("changeType", selectedLanguage)}
+                  Change Type
                 </Button>
               </div>
               <ContentForm type={selectedType} onSubmit={handleFormSubmit} />
@@ -312,12 +293,10 @@ const Index = () => {
 
             <div className="glass-card p-6 rounded-lg">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-white">
-                  {getTranslation("generatedContent", selectedLanguage)}
-                </h2>
+                <h2 className="text-2xl font-semibold text-white">Generated Content</h2>
                 {generatedContent && (
                   <Button onClick={copyToClipboard} variant="outline" className="border-white/10 hover:bg-white/10">
-                    {getTranslation("copy", selectedLanguage)}
+                    Copy
                   </Button>
                 )}
               </div>
@@ -331,7 +310,7 @@ const Index = () => {
                     >
                       <Sparkles className="w-5 h-5" />
                     </motion.div>
-                    {getTranslation("generating", selectedLanguage)}
+                    Generating content...
                   </div>
                 ) : generatedContent ? (
                   <div className="bg-white/5 p-4 rounded-lg min-h-[200px] whitespace-pre-wrap text-white/90">
@@ -339,7 +318,7 @@ const Index = () => {
                   </div>
                 ) : (
                   <div className="text-center text-white/60 min-h-[200px] flex items-center justify-center">
-                    {getTranslation("generatedContentPlaceholder", selectedLanguage)}
+                    Generated content will appear here
                   </div>
                 )}
               </div>
