@@ -188,46 +188,41 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
           <div className="space-y-2">
             <Label>Image Description</Label>
             <textarea
-              className="input-field min-h-[150px]"
+              className="w-full min-h-[150px] bg-white/5 border border-white/10 rounded-md p-3 text-white"
               placeholder="Describe the image you want to generate..."
               onChange={(e) => handleChange("content", e.target.value)}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Additional Details</Label>
-            <textarea
-              className="input-field min-h-[100px]"
-              placeholder="Add any specific details about lighting, composition, colors, etc..."
-              onChange={(e) => handleChange("additionalDetails", e.target.value)}
             />
           </div>
         </>
       )}
 
-      <div className="space-y-2">
-        <Label>Content Length</Label>
-        <Select onValueChange={(value) => handleChange("length", value)}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select length" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="short">Short (~150 words)</SelectItem>
-            <SelectItem value="medium">Medium (~350 words)</SelectItem>
-            <SelectItem value="long">Long (~500 words)</SelectItem>
-            <SelectItem value="extensive">Extensive (~800+ words)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {type !== "image" && (
+        <>
+          <div className="space-y-2">
+            <Label>Content Length</Label>
+            <Select onValueChange={(value) => handleChange("length", value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select length" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="short">Short (~150 words)</SelectItem>
+                <SelectItem value="medium">Medium (~350 words)</SelectItem>
+                <SelectItem value="long">Long (~500 words)</SelectItem>
+                <SelectItem value="extensive">Extensive (~800+ words)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-      <div className="space-y-2">
-        <Label>Content</Label>
-        <textarea
-          className="input-field min-h-[150px]"
-          placeholder="Enter your content or prompt here..."
-          onChange={(e) => handleChange("content", e.target.value)}
-        />
-      </div>
+          <div className="space-y-2">
+            <Label>Content</Label>
+            <textarea
+              className="w-full min-h-[150px] bg-white/5 border border-white/10 rounded-md p-3 text-white"
+              placeholder="Enter your content or prompt here..."
+              onChange={(e) => handleChange("content", e.target.value)}
+            />
+          </div>
+        </>
+      )}
 
       <Button type="submit" className="w-full">
         Generate Content

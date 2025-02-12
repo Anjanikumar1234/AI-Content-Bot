@@ -65,17 +65,15 @@ const Index = () => {
 
   const languages = [
     { value: "english", label: "English" },
-    { value: "spanish", label: "Español" },
-    { value: "french", label: "Français" },
-    { value: "german", label: "Deutsch" },
-    { value: "italian", label: "Italiano" },
-    { value: "portuguese", label: "Português" },
-    { value: "russian", label: "Русский" },
-    { value: "chinese", label: "中文" },
-    { value: "japanese", label: "日本語" },
-    { value: "korean", label: "한국어" },
-    { value: "arabic", label: "العربية" },
     { value: "hindi", label: "हिन्दी" },
+    { value: "telugu", label: "తెలుగు" },
+    { value: "tamil", label: "தமிழ்" },
+    { value: "kannada", label: "ಕನ್ನಡ" },
+    { value: "malayalam", label: "മലയാളം" },
+    { value: "bengali", label: "বাংলা" },
+    { value: "marathi", label: "मराठी" },
+    { value: "gujarati", label: "ગુજરાતી" },
+    { value: "punjabi", label: "ਪੰਜਾਬੀ" },
   ];
 
   const generatePrompt = (type: string, data: any) => {
@@ -113,7 +111,6 @@ const Index = () => {
       const generatedText = await generateContent(prompt);
       setGeneratedContent(generatedText);
       
-      // Add to history
       setSearchHistory(prev => [...prev, {
         type: selectedType!,
         content: data.content,
@@ -146,7 +143,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#000000] p-8 relative overflow-hidden">
-      {/* Animated background grid with perspective */}
       <div 
         className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20"
         style={{
@@ -155,7 +151,6 @@ const Index = () => {
         }}
       />
       
-      {/* Dynamic lighting overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-white/5 pointer-events-none" />
       
       <motion.div
@@ -261,17 +256,32 @@ const Index = () => {
         </div>
 
         {!selectedType ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {contentTypes.map((type) => (
-              <ContentTypeCard
-                key={type.id}
-                title={type.title}
-                description={type.description}
-                icon={type.icon}
-                onClick={() => setSelectedType(type.id)}
-                isSelected={selectedType === type.id}
-              />
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="col-span-3 grid grid-cols-3 gap-6">
+              {contentTypes.slice(0, 3).map((type) => (
+                <ContentTypeCard
+                  key={type.id}
+                  title={type.title}
+                  description={type.description}
+                  icon={type.icon}
+                  onClick={() => setSelectedType(type.id)}
+                  isSelected={selectedType === type.id}
+                />
+              ))}
+            </div>
+            <div className="col-span-3 flex justify-center gap-6">
+              {contentTypes.slice(3).map((type) => (
+                <div key={type.id} className="w-1/3">
+                  <ContentTypeCard
+                    title={type.title}
+                    description={type.description}
+                    icon={type.icon}
+                    onClick={() => setSelectedType(type.id)}
+                    isSelected={selectedType === type.id}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
