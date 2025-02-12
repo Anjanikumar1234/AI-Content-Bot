@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -25,6 +24,8 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
     platform: "",
     style: "",
     content: "",
+    imageStyle: "",
+    additionalDetails: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -164,6 +165,44 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
             </SelectContent>
           </Select>
         </div>
+      )}
+
+      {type === "image" && (
+        <>
+          <div className="space-y-2">
+            <Label>Image Style</Label>
+            <Select onValueChange={(value) => handleChange("imageStyle", value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select style" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="realistic">Realistic</SelectItem>
+                <SelectItem value="artistic">Artistic</SelectItem>
+                <SelectItem value="3d">3D Render</SelectItem>
+                <SelectItem value="cartoon">Cartoon</SelectItem>
+                <SelectItem value="sketch">Sketch</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Image Description</Label>
+            <textarea
+              className="input-field min-h-[150px]"
+              placeholder="Describe the image you want to generate..."
+              onChange={(e) => handleChange("content", e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Additional Details</Label>
+            <textarea
+              className="input-field min-h-[100px]"
+              placeholder="Add any specific details about lighting, composition, colors, etc..."
+              onChange={(e) => handleChange("additionalDetails", e.target.value)}
+            />
+          </div>
+        </>
       )}
 
       <div className="space-y-2">

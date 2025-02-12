@@ -1,17 +1,33 @@
-
 import { useState } from "react";
-import { Mail, BookText, Share2, Type, Sparkles } from "lucide-react";
+import { Mail, BookText, Share2, Type, Sparkles, Globe, History, Image, Info, Phone } from "lucide-react";
 import ContentTypeCard from "@/components/ContentTypeCard";
 import ContentForm from "@/components/ContentForm";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 import { generateContent } from "@/api/generate";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Index = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [generatedContent, setGeneratedContent] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("english");
+  const [searchHistory, setSearchHistory] = useState<Array<{type: string, content: string, timestamp: Date}>>([]);
   const { toast } = useToast();
 
   const contentTypes = [
@@ -39,18 +55,43 @@ const Index = () => {
       description: "Generate various types of text content",
       icon: <Type className="w-8 h-8" />,
     },
+    {
+      id: "image",
+      title: "Image Generation",
+      description: "Create stunning AI-generated images",
+      icon: <Image className="w-8 h-8" />,
+    },
+  ];
+
+  const languages = [
+    { value: "english", label: "English" },
+    { value: "spanish", label: "Español" },
+    { value: "french", label: "Français" },
+    { value: "german", label: "Deutsch" },
+    { value: "italian", label: "Italiano" },
+    { value: "portuguese", label: "Português" },
+    { value: "russian", label: "Русский" },
+    { value: "chinese", label: "中文" },
+    { value: "japanese", label: "日本語" },
+    { value: "korean", label: "한국어" },
+    { value: "arabic", label: "العربية" },
+    { value: "hindi", label: "हिन्दी" },
   ];
 
   const generatePrompt = (type: string, data: any) => {
+    const languagePrompt = selectedLanguage !== "english" ? `Translate the following to ${selectedLanguage}: ` : "";
+    
     switch (type) {
       case "email":
-        return `Write a ${data.tone || "professional"} email from ${data.senderName || "sender"} to ${data.receiverName || "receiver"} that is ${data.length || "medium"} in length. Type: ${data.emailType || "compose"}. Content context: ${data.content}`;
+        return `${languagePrompt}Write a ${data.tone || "professional"} email from ${data.senderName || "sender"} to ${data.receiverName || "receiver"} that is ${data.length || "medium"} in length. Type: ${data.emailType || "compose"}. Content context: ${data.content}`;
       case "essay":
-        return `Write a ${data.essayType || "simple"} essay that is ${data.length || "medium"} in length about: ${data.content}`;
+        return `${languagePrompt}Write a ${data.essayType || "simple"} essay that is ${data.length || "medium"} in length about: ${data.content}`;
       case "social":
-        return `Write a ${data.style || "professional"} social media post for ${data.platform || "LinkedIn"} that is ${data.length || "medium"} in length about: ${data.content}`;
+        return `${languagePrompt}Write a ${data.style || "professional"} social media post for ${data.platform || "LinkedIn"} that is ${data.length || "medium"} in length about: ${data.content}`;
       case "text":
-        return `${data.textType || "Summarize"} the following text to be ${data.length || "medium"} in length: ${data.content}`;
+        return `${languagePrompt}${data.textType || "Summarize"} the following text to be ${data.length || "medium"} in length: ${data.content}`;
+      case "image":
+        return `Create a highly detailed, professional image of: ${data.content}. Style: ${data.imageStyle || "realistic"}. Include these details: ${data.additionalDetails || "none"}`;
       default:
         return data.content;
     }
@@ -71,6 +112,13 @@ const Index = () => {
       const prompt = generatePrompt(selectedType!, data);
       const generatedText = await generateContent(prompt);
       setGeneratedContent(generatedText);
+      
+      // Add to history
+      setSearchHistory(prev => [...prev, {
+        type: selectedType!,
+        content: data.content,
+        timestamp: new Date()
+      }]);
       
       toast({
         title: "Success!",
@@ -116,6 +164,83 @@ const Index = () => {
         transition={{ duration: 0.5 }}
         className="max-w-6xl mx-auto relative"
       >
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+              <SelectTrigger className="w-[180px] bg-white/5 border-white/10">
+                <Globe className="w-4 h-4 mr-2" />
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent>
+                {languages.map((lang) => (
+                  <SelectItem key={lang.value} value={lang.value}>
+                    {lang.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <History className="w-4 h-4" />
+                  History
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Search History</SheetTitle>
+                  <SheetDescription>
+                    Your recent content generation requests
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-4 space-y-4">
+                  {searchHistory.map((item, index) => (
+                    <div key={index} className="p-4 rounded-lg bg-white/5">
+                      <div className="font-medium text-white">{item.type}</div>
+                      <div className="text-sm text-white/60 mt-1">{item.content}</div>
+                      <div className="text-xs text-white/40 mt-1">
+                        {new Date(item.timestamp).toLocaleString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Info className="w-4 h-4" />
+                  Contact
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Contact Information</SheetTitle>
+                  <SheetDescription>
+                    Get in touch for support or queries
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-4 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    <a href="mailto:pallapoluanjanikumar@gmail.com" className="text-blue-400 hover:underline">
+                      pallapoluanjanikumar@gmail.com
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    <a href="tel:+918125436681" className="text-blue-400 hover:underline">
+                      +91 8125436681
+                    </a>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+
         <div className="text-center mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
