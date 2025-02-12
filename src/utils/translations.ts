@@ -1,3 +1,4 @@
+
 export const translations = {
   "navigation": {
     "english": {
@@ -22,7 +23,6 @@ export const translations = {
       "contactInfo": "संपर्क जानकारी",
       "contactDescription": "सहायता या प्रश्नों के लिए संपर्क करें"
     }
-    // Add other language translations
   },
   "content": {
     "english": {
@@ -56,15 +56,26 @@ export const translations = {
       "social": "सोशल मीडिया",
       "text": "टेक्स्ट जनरेशन",
       "image": "इमेज जनरेशन"
-      // ... Add other Hindi translations
     }
-    // Add other language translations
   }
 };
 
-export const getTranslation = (category: "navigation" | "content", key: string, language: string = 'english') => {
-  const translation = translations[category]?.[language]?.[key] || 
-                     translations[category]?.["english"]?.[key] || 
-                     key;
-  return translation;
+export const getTranslation = (key: string, language: string = 'english') => {
+  // First try to find in navigation
+  const navTranslation = translations.navigation[language]?.[key];
+  if (navTranslation) return navTranslation;
+
+  // Then try to find in content
+  const contentTranslation = translations.content[language]?.[key];
+  if (contentTranslation) return contentTranslation;
+
+  // Fallback to English
+  const englishNav = translations.navigation.english[key];
+  if (englishNav) return englishNav;
+
+  const englishContent = translations.content.english[key];
+  if (englishContent) return englishContent;
+
+  // If no translation found, return the key
+  return key;
 };

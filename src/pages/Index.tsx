@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Home, Mail, BookText, Share2, Type, Sparkles, Globe, History, Image, Info, Phone } from "lucide-react";
 import ContentTypeCard from "@/components/ContentTypeCard";
@@ -171,18 +172,18 @@ const Index = () => {
           <div className="flex items-center space-x-8">
             <Button variant="ghost" className="text-white gap-2">
               <Home className="w-5 h-5" />
-              {getTranslation("navigation", "home", selectedLanguage)}
+              {getTranslation("home", selectedLanguage)}
             </Button>
             
             <Button variant="ghost" className="text-white gap-2">
               <Sparkles className="w-5 h-5" />
-              {getTranslation("navigation", "generations", selectedLanguage)}
+              {getTranslation("generations", selectedLanguage)}
             </Button>
 
             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
               <SelectTrigger className="w-[180px] bg-white/5 border-white/10">
                 <Globe className="w-4 h-4 mr-2" />
-                <SelectValue placeholder={getTranslation("navigation", "language", selectedLanguage)} />
+                <SelectValue placeholder={getTranslation("language", selectedLanguage)} />
               </SelectTrigger>
               <SelectContent>
                 {languages.map((lang) => (
@@ -197,20 +198,20 @@ const Index = () => {
               <SheetTrigger asChild>
                 <Button variant="ghost" className="gap-2">
                   <History className="w-4 h-4" />
-                  {getTranslation("navigation", "history", selectedLanguage)}
+                  {getTranslation("history", selectedLanguage)}
                 </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>{getTranslation("navigation", "searchHistory", selectedLanguage)}</SheetTitle>
+                  <SheetTitle>{getTranslation("searchHistory", selectedLanguage)}</SheetTitle>
                   <SheetDescription>
-                    {getTranslation("navigation", "recentRequests", selectedLanguage)}
+                    {getTranslation("recentRequests", selectedLanguage)}
                   </SheetDescription>
                 </SheetHeader>
                 <div className="mt-4 space-y-4">
                   {searchHistory.map((item, index) => (
                     <div key={index} className="p-4 rounded-lg bg-white/5">
-                      <div className="font-medium text-white">{getTranslation(item.type)}</div>
+                      <div className="font-medium text-white">{getTranslation(item.type, selectedLanguage)}</div>
                       <div className="text-sm text-white/60 mt-1">{item.content}</div>
                       <div className="text-xs text-white/40 mt-1">
                         {new Date(item.timestamp).toLocaleString()}
@@ -225,14 +226,14 @@ const Index = () => {
               <SheetTrigger asChild>
                 <Button variant="ghost" className="gap-2">
                   <Info className="w-4 h-4" />
-                  {getTranslation("navigation", "contact", selectedLanguage)}
+                  {getTranslation("contact", selectedLanguage)}
                 </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>{getTranslation("navigation", "contactInfo", selectedLanguage)}</SheetTitle>
+                  <SheetTitle>{getTranslation("contactInfo", selectedLanguage)}</SheetTitle>
                   <SheetDescription>
-                    {getTranslation("navigation", "contactDescription", selectedLanguage)}
+                    {getTranslation("contactDescription", selectedLanguage)}
                   </SheetDescription>
                 </SheetHeader>
                 <div className="mt-4 space-y-4">
@@ -270,8 +271,8 @@ const Index = () => {
               {contentTypes.slice(0, 3).map((type) => (
                 <ContentTypeCard
                   key={type.id}
-                  title={getTranslation("content", type.id, selectedLanguage)}
-                  description={getTranslation("content", `${type.id}Desc`, selectedLanguage)}
+                  title={getTranslation(type.id, selectedLanguage)}
+                  description=""
                   icon={type.icon}
                   onClick={() => setSelectedType(type.id)}
                   isSelected={selectedType === type.id}
@@ -282,8 +283,8 @@ const Index = () => {
               {contentTypes.slice(3).map((type) => (
                 <ContentTypeCard
                   key={type.id}
-                  title={getTranslation("content", type.id, selectedLanguage)}
-                  description={getTranslation("content", `${type.id}Desc`, selectedLanguage)}
+                  title={getTranslation(type.id, selectedLanguage)}
+                  description=""
                   icon={type.icon}
                   onClick={() => setSelectedType(type.id)}
                   isSelected={selectedType === type.id}
@@ -296,14 +297,14 @@ const Index = () => {
             <div className="glass-card p-6 rounded-lg">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold text-white">
-                  {getTranslation(selectedType)}
+                  {getTranslation(selectedType, selectedLanguage)}
                 </h2>
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedType(null)}
                   className="text-white/60 hover:text-white hover:bg-white/10"
                 >
-                  {getTranslation("changeType")}
+                  {getTranslation("changeType", selectedLanguage)}
                 </Button>
               </div>
               <ContentForm type={selectedType} onSubmit={handleFormSubmit} />
@@ -311,10 +312,12 @@ const Index = () => {
 
             <div className="glass-card p-6 rounded-lg">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-white">{getTranslation("generatedContent")}</h2>
+                <h2 className="text-2xl font-semibold text-white">
+                  {getTranslation("generatedContent", selectedLanguage)}
+                </h2>
                 {generatedContent && (
                   <Button onClick={copyToClipboard} variant="outline" className="border-white/10 hover:bg-white/10">
-                    {getTranslation("copy")}
+                    {getTranslation("copy", selectedLanguage)}
                   </Button>
                 )}
               </div>
@@ -328,7 +331,7 @@ const Index = () => {
                     >
                       <Sparkles className="w-5 h-5" />
                     </motion.div>
-                    {getTranslation("generating")}
+                    {getTranslation("generating", selectedLanguage)}
                   </div>
                 ) : generatedContent ? (
                   <div className="bg-white/5 p-4 rounded-lg min-h-[200px] whitespace-pre-wrap text-white/90">
@@ -336,7 +339,7 @@ const Index = () => {
                   </div>
                 ) : (
                   <div className="text-center text-white/60 min-h-[200px] flex items-center justify-center">
-                    {getTranslation("generatedContentPlaceholder")}
+                    {getTranslation("generatedContentPlaceholder", selectedLanguage)}
                   </div>
                 )}
               </div>
