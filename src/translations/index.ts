@@ -25,8 +25,8 @@ export type TranslationKey =
   | "errorDesc"
   | "success"
   | "successDesc"
-  | "contactInfo"  // Added missing key
-  | "contactDesc"; // Added missing key
+  | "contactInfo"
+  | "contactDesc";
 
 export const translations: Record<string, Record<TranslationKey, string>> = {
   english: {
@@ -56,8 +56,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     errorDesc: "Failed to generate content. Please try again.",
     success: "Success!",
     successDesc: "Your content has been generated.",
-    contactInfo: "Contact Information", // Added missing translation
-    contactDesc: "Get in touch with us", // Added missing translation
+    contactInfo: "Contact Information",
+    contactDesc: "Get in touch with us",
   },
   hindi: {
     emailGeneration: "ईमेल जनरेशन",
@@ -91,7 +91,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
   },
   telugu: {
     emailGeneration: "ఇమెయిల్ జనరేషన్",
-    emailDesc: "వృత్తిపరమైన మరియు వ్యక్తిగత ఇమెయిల్‌లను సృష్టించండి",
+    emailDesc: "వృత్తిపరమైన మరియు వ్యక్తిగత ఇమెయిల్‌���ను సృష్టించండి",
     essayWriting: "వ్యాస రచన",
     essayDesc: "బాగా నిర్మించబడిన వ్యాసాలను సృష్టించండి",
     socialMedia: "సోషల్ మీడియా",
@@ -119,7 +119,66 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     contactInfo: "సంప్రదింపు సమాచారం",
     contactDesc: "మమ్మల్ని సంప్రదించండి",
   },
-  // Add other Indian languages here with their translations
+  tamil: {
+    emailGeneration: "மின்னஞ்சல் உருவாக்கம்",
+    emailDesc: "தொழில்முறை மற்றும் தனிப்பயனாக்கப்பட்ட மின்னஞ்சல்களை உருவாக்குங்கள்",
+    essayWriting: "கட்டுரை எழுதுதல்",
+    essayDesc: "நன்கு கட்டமைக்கப்பட்ட கட்டுரைகளை உருவாக்குங்கள்",
+    socialMedia: "சமூக ஊடகம்",
+    socialDesc: "கவர்ச்சிகரமான சமூக ஊடக உள்��டக்கத்தை உருவாக்குங்கள்",
+    textGeneration: "உரை உருவாக்கம்",
+    textDesc: "பல்வேறு வகையான உரை உள்ளடக்கத்தை உருவாக்குங்கள்",
+    imageGeneration: "படம் உருவாக்கம்",
+    imageDesc: "AI மூலம் அழகான படங்களை உருவாக்குங்கள்",
+    generateContent: "கంటెంట్ ஸృష్టించండి",
+    contentLength: "கంటెంట్ பొడవు",
+    imageStyle: "பட பாணி",
+    imageDescription: "பட விளக்கம்",
+    selectStyle: "பாணியைத் தேர்ந்தெடுக்கவும்",
+    selectLength: "நீளத்தைத் தேர்ந்தெடுக்கவும்",
+    enterContent: "உங்கள் உள்ளடக்கத்தை இங்கே உள்ளிடவும்...",
+    history: "வரலாறு",
+    contact: "தொடர்பு",
+    searchHistory: "தேடல் வரலாறு",
+    recentRequests: "உங்கள் சமீபத்திய உள்ளடக்க உருவாக்க கோரிக்கைகள்",
+    selectLanguage: "மொழியைத் தேர்ந்தெடுக்கவும்",
+    error: "பிழை",
+    errorDesc: "உள்ளடக்கத்தை உருவாக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+    success: "வெற்றி!",
+    successDesc: "உங்கள் உள்ளடக்கம் உருவாக்கப்பட்டது.",
+    contactInfo: "தொடர்பு தகவல்",
+    contactDesc: "எங்களை தொடர்பு கொள்ளவும்",
+  },
+  malayalam: {
+    emailGeneration: "ഇമെയിൽ ജനറേഷൻ",
+    emailDesc: "പ്രൊഫഷണലും വ്യക്തിഗതവുമായ ഇമെയിൽുകൾ സൃഷ്ടിക്കുക",
+    essayWriting: "ഉപന്യാസ രചന",
+    essayDesc: "നന്നായി ക്രമീകരിച്ച ഉപന്യാസങ്ങൾ സൃഷ്ടിക്കുക",
+    socialMedia: "സോഷ്യൽ മീഡിയ",
+    socialDesc: "ആകർഷകമായ സോഷ്യൽ മീഡിയ ഉള്ളടക്കം സൃഷ്ടിക്കുക",
+    textGeneration: "ടെക്സ്റ്റ് ജനറേഷൻ",
+    textDesc: "വിവിധ തരം ടെക്സ്റ്റ് ഉള്ളടക്കം സൃഷ്ടിക്കുക",
+    imageGeneration: "ചിത്ര ജനറേഷൻ",
+    imageDesc: "AI ഉപയോഗിച്ച് മനോഹരമായ ചിത്രങ്ങൾ സൃഷ്ടിക്കുക",
+    generateContent: "ഉള്ളടക്കം സൃഷ്ടിക്കുക",
+    contentLength: "ഉള്ളടക്ക ദൈർഘ്യം",
+    imageStyle: "ചിത്ര ശൈലി",
+    imageDescription: "ചിത്ര വിവരണം",
+    selectStyle: "ശൈലി തിരഞ്ഞെടുക്കുക",
+    selectLength: "ദൈർഘ്യം തിരഞ്ഞെടുക്കുക",
+    enterContent: "നിങ്ങളുടെ ഉള്ളടക്കം ഇവിടെ നൽകുക...",
+    history: "ചരിത്രം",
+    contact: "ബന്ധപ്പെടുക",
+    searchHistory: "തിരയൽ ചരിത്രം",
+    recentRequests: "നിങ്ങളുടെ സമീപകാല ഉള്ളടക്ക ജനറേഷൻ അഭ്യർത്ഥനകൾ",
+    selectLanguage: "ഭാഷ തിരഞ്ഞെടുക്കുക",
+    error: "പിശക്",
+    errorDesc: "ഉള്ളടക്കം സൃഷ്ടിക്കാൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കുക.",
+    success: "വിജയം!",
+    successDesc: "നിങ്ങളുടെ ഉള്ളടക്കം സൃഷ്ടിക്കപ്പെട്ടു.",
+    contactInfo: "ബന്ധപ്പെടാനുള്ള വിവരങ്ങൾ",
+    contactDesc: "ഞങ്ങളുമായി ബന്ധപ്പെടുക",
+  }
 };
 
 export const useTranslation = (language: string) => {
