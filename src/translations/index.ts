@@ -1,4 +1,3 @@
-
 export type TranslationKey =
   | "emailGeneration"
   | "emailDesc"
@@ -25,7 +24,9 @@ export type TranslationKey =
   | "error"
   | "errorDesc"
   | "success"
-  | "successDesc";
+  | "successDesc"
+  | "contactInfo"  // Added missing key
+  | "contactDesc"; // Added missing key
 
 export const translations: Record<string, Record<TranslationKey, string>> = {
   english: {
@@ -55,6 +56,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     errorDesc: "Failed to generate content. Please try again.",
     success: "Success!",
     successDesc: "Your content has been generated.",
+    contactInfo: "Contact Information", // Added missing translation
+    contactDesc: "Get in touch with us", // Added missing translation
   },
   hindi: {
     emailGeneration: "ईमेल जनरेशन",
@@ -83,6 +86,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     errorDesc: "सामग्री बनाने में विफल। कृपया पुनः प्रयास करें।",
     success: "सफलता!",
     successDesc: "आपकी सामग्री बन गई है।",
+    contactInfo: "संपर्क जानकारी",
+    contactDesc: "हमसे संपर्क करें",
   },
   telugu: {
     emailGeneration: "ఇమెయిల్ జనరేషన్",
@@ -111,6 +116,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     errorDesc: "కంటెంట్ సృష్టించడంలో విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.",
     success: "విజయం!",
     successDesc: "మీ కంటెంట్ సృష్టించబడింది.",
+    contactInfo: "సంప్రదింపు సమాచారం",
+    contactDesc: "మమ్మల్ని సంప్రదించండి",
   },
   // Add other Indian languages here with their translations
 };
