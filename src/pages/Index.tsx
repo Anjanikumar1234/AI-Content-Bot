@@ -21,6 +21,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useTranslation } from "@/translations";
 
 const Index = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -29,36 +30,37 @@ const Index = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("english");
   const [searchHistory, setSearchHistory] = useState<Array<{type: string, content: string, timestamp: Date}>>([]);
   const { toast } = useToast();
+  const t = useTranslation(selectedLanguage);
 
   const contentTypes = [
     {
       id: "email",
-      title: "Email Generation",
-      description: "Create professional and personalized emails",
+      title: t("emailGeneration"),
+      description: t("emailDesc"),
       icon: <Mail className="w-8 h-8" />,
     },
     {
       id: "essay",
-      title: "Essay Writing",
-      description: "Generate well-structured essays",
+      title: t("essayWriting"),
+      description: t("essayDesc"),
       icon: <BookText className="w-8 h-8" />,
     },
     {
       id: "social",
-      title: "Social Media",
-      description: "Create engaging social media content",
+      title: t("socialMedia"),
+      description: t("socialDesc"),
       icon: <Share2 className="w-8 h-8" />,
     },
     {
       id: "text",
-      title: "Text Generation",
-      description: "Generate various types of text content",
+      title: t("textGeneration"),
+      description: t("textDesc"),
       icon: <Type className="w-8 h-8" />,
     },
     {
       id: "image",
-      title: "Image Generation",
-      description: "Create stunning AI-generated images",
+      title: t("imageGeneration"),
+      description: t("imageDesc"),
       icon: <Image className="w-8 h-8" />,
     },
   ];
@@ -164,7 +166,7 @@ const Index = () => {
             <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
               <SelectTrigger className="w-[180px] bg-white/5 border-white/10">
                 <Globe className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Select language" />
+                <SelectValue placeholder={t("selectLanguage")} />
               </SelectTrigger>
               <SelectContent>
                 {languages.map((lang) => (
@@ -179,14 +181,14 @@ const Index = () => {
               <SheetTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <History className="w-4 h-4" />
-                  History
+                  {t("history")}
                 </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>Search History</SheetTitle>
+                  <SheetTitle>{t("searchHistory")}</SheetTitle>
                   <SheetDescription>
-                    Your recent content generation requests
+                    {t("recentRequests")}
                   </SheetDescription>
                 </SheetHeader>
                 <div className="mt-4 space-y-4">
@@ -207,14 +209,14 @@ const Index = () => {
               <SheetTrigger asChild>
                 <Button variant="outline" className="gap-2">
                   <Info className="w-4 h-4" />
-                  Contact
+                  {t("contact")}
                 </Button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
-                  <SheetTitle>Contact Information</SheetTitle>
+                  <SheetTitle>{t("contactInfo")}</SheetTitle>
                   <SheetDescription>
-                    Get in touch for support or queries
+                    {t("contactDesc")}
                   </SheetDescription>
                 </SheetHeader>
                 <div className="mt-4 space-y-4">
@@ -298,7 +300,11 @@ const Index = () => {
                   Change Type
                 </Button>
               </div>
-              <ContentForm type={selectedType} onSubmit={handleFormSubmit} />
+              <ContentForm 
+                type={selectedType} 
+                onSubmit={handleFormSubmit}
+                language={selectedLanguage} 
+              />
             </div>
 
             <div className="glass-card p-6 rounded-lg">

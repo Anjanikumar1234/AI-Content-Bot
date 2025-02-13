@@ -19,10 +19,7 @@ const ContentTypeCard = ({ title, description, icon, onClick, isSelected }: Cont
       whileHover={{ scale: 1.05, rotateX: 2, rotateY: 2 }}
       className="relative group w-full h-full"
     >
-      {/* Lightning effect overlay */}
       <div className="absolute -inset-[1px] bg-gradient-to-r from-white/10 via-white/5 to-black/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      
-      {/* Glow effect */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-white/20 to-black/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
 
       <Card
@@ -31,13 +28,10 @@ const ContentTypeCard = ({ title, description, icon, onClick, isSelected }: Cont
         }`}
         onClick={onClick}
       >
-        {/* Glass background with depth effect */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20" />
         
-        {/* Content with pseudo-3D transform */}
         <div className="relative p-6 transition-transform duration-300 group-hover:transform group-hover:translate-y-[-2px] h-full flex flex-col justify-center">
           <div className="flex flex-col items-center text-center gap-4">
-            {/* Icon with glow effect */}
             <div className="text-4xl text-white relative">
               <div className="absolute inset-0 blur-sm opacity-50 group-hover:opacity-100 transition-opacity">
                 {icon}
@@ -47,7 +41,6 @@ const ContentTypeCard = ({ title, description, icon, onClick, isSelected }: Cont
               </div>
             </div>
             
-            {/* Text content with gradient */}
             <div className="space-y-2">
               <h3 className="text-lg font-semibold bg-gradient-to-r from-white via-white/90 to-white/80 bg-clip-text text-transparent">
                 {title}

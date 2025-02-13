@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -10,13 +11,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/translations";
 
 interface ContentFormProps {
   type: string;
   onSubmit: (data: any) => void;
+  language: string;
 }
 
-const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
+const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
+  const t = useTranslation(language);
   const [formData, setFormData] = useState({
     tone: "",
     language: "English",
@@ -45,135 +49,13 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
       onSubmit={handleSubmit}
       className="space-y-6"
     >
-      {type === "email" && (
-        <>
-          <div className="space-y-2">
-            <Label>Email Type</Label>
-            <Select
-              onValueChange={(value) => handleChange("emailType", value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select email type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="compose">Compose</SelectItem>
-                <SelectItem value="reply">Reply</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Tone</Label>
-            <Select onValueChange={(value) => handleChange("tone", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select tone" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="friendly">Friendly</SelectItem>
-                <SelectItem value="professional">Professional</SelectItem>
-                <SelectItem value="casual">Casual</SelectItem>
-                <SelectItem value="persuasive">Persuasive</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Sender Name</Label>
-              <Input
-                placeholder="Enter sender name"
-                onChange={(e) => handleChange("senderName", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Receiver Name</Label>
-              <Input
-                placeholder="Enter receiver name"
-                onChange={(e) => handleChange("receiverName", e.target.value)}
-              />
-            </div>
-          </div>
-        </>
-      )}
-
-      {type === "essay" && (
-        <>
-          <div className="space-y-2">
-            <Label>Essay Type</Label>
-            <Select onValueChange={(value) => handleChange("essayType", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select essay type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="simple">Simple</SelectItem>
-                <SelectItem value="descriptive">Descriptive</SelectItem>
-                <SelectItem value="narrative">Narrative</SelectItem>
-                <SelectItem value="persuasive">Persuasive</SelectItem>
-                <SelectItem value="professional">Professional</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </>
-      )}
-
-      {type === "social" && (
-        <>
-          <div className="space-y-2">
-            <Label>Platform</Label>
-            <Select onValueChange={(value) => handleChange("platform", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select platform" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="linkedin">LinkedIn</SelectItem>
-                <SelectItem value="twitter">Twitter</SelectItem>
-                <SelectItem value="instagram">Instagram</SelectItem>
-                <SelectItem value="facebook">Facebook</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Style</Label>
-            <Select onValueChange={(value) => handleChange("style", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select style" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="professional">Professional</SelectItem>
-                <SelectItem value="friendly">Friendly</SelectItem>
-                <SelectItem value="creative">Creative</SelectItem>
-                <SelectItem value="inspirational">Inspirational</SelectItem>
-                <SelectItem value="storytelling">Storytelling</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </>
-      )}
-
-      {type === "text" && (
-        <div className="space-y-2">
-          <Label>Text Type</Label>
-          <Select onValueChange={(value) => handleChange("textType", value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select text type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="summarization">Summarization</SelectItem>
-              <SelectItem value="elaboration">Elaboration</SelectItem>
-              <SelectItem value="creative">Creative Writing</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
       {type === "image" && (
         <>
           <div className="space-y-2">
-            <Label>Image Style</Label>
+            <Label>{t("imageStyle")}</Label>
             <Select onValueChange={(value) => handleChange("imageStyle", value)}>
               <SelectTrigger>
-                <SelectValue placeholder="Select style" />
+                <SelectValue placeholder={t("selectStyle")} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="realistic">Realistic</SelectItem>
@@ -186,10 +68,10 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Image Description</Label>
+            <Label>{t("imageDescription")}</Label>
             <textarea
               className="w-full min-h-[150px] bg-white/5 border border-white/10 rounded-md p-3 text-white"
-              placeholder="Describe the image you want to generate..."
+              placeholder={t("enterContent")}
               onChange={(e) => handleChange("content", e.target.value)}
             />
           </div>
@@ -199,10 +81,10 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
       {type !== "image" && (
         <>
           <div className="space-y-2">
-            <Label>Content Length</Label>
+            <Label>{t("contentLength")}</Label>
             <Select onValueChange={(value) => handleChange("length", value)}>
               <SelectTrigger>
-                <SelectValue placeholder="Select length" />
+                <SelectValue placeholder={t("selectLength")} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="short">Short (~150 words)</SelectItem>
@@ -217,7 +99,7 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
             <Label>Content</Label>
             <textarea
               className="w-full min-h-[150px] bg-white/5 border border-white/10 rounded-md p-3 text-white"
-              placeholder="Enter your content or prompt here..."
+              placeholder={t("enterContent")}
               onChange={(e) => handleChange("content", e.target.value)}
             />
           </div>
@@ -225,7 +107,7 @@ const ContentForm = ({ type, onSubmit }: ContentFormProps) => {
       )}
 
       <Button type="submit" className="w-full">
-        Generate Content
+        {t("generateContent")}
       </Button>
     </motion.form>
   );
