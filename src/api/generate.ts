@@ -6,7 +6,6 @@ const corsHeaders = {
 
 export const generateContent = async (prompt: string) => {
   try {
-    // Get the API key from environment variables
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     
     if (!apiKey) {
@@ -24,10 +23,11 @@ export const generateContent = async (prompt: string) => {
         messages: [
           { 
             role: 'system', 
-            content: 'You are a professional content generator. Generate content based on the user prompts while maintaining the specified tone, length, and style. Make sure the content is engaging and well-structured.'
+            content: 'You are a professional content generator. Generate content based on the user prompts while maintaining the specified tone, length, and style. Make sure the content is engaging and well-structured. When asked to generate content in a specific language, generate it directly in that language for better authenticity.'
           },
           { role: 'user', content: prompt }
         ],
+        stream: true,
       }),
     });
 
@@ -36,8 +36,34 @@ export const generateContent = async (prompt: string) => {
       throw new Error(errorData.error?.message || 'Failed to generate content');
     }
 
-    const data = await response.json();
-    return data.choices[0].message.content;
+    const reader = response.body?.getReader();
+    const decoder = new TextDecoder();
+    let content = '';
+
+    while (reader) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      const chunk = decoder.decode(value);
+      const lines = chunk.split('\n');
+      
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6);
+          if (data === '[DONE]') break;
+          
+          try {
+            const parsed = JSON.parse(data);
+            const textChunk = parsed.choices[0]?.delta?.content || '';
+            content += textChunk;
+          } catch (e) {
+            console.error('Error parsing chunk:', e);
+          }
+        }
+      }
+    }
+
+    return content;
   } catch (error) {
     console.error('Error in generate function:', error);
     throw error;
