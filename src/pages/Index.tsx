@@ -40,10 +40,6 @@ const Index = () => {
     { value: "tamil", label: "தமிழ்" },
     { value: "kannada", label: "ಕನ್ನಡ" },
     { value: "malayalam", label: "മലയാളം" },
-    { value: "bengali", label: "বাংলা" },
-    { value: "marathi", label: "मराठी" },
-    { value: "gujarati", label: "ગુજરાતી" },
-    { value: "punjabi", label: "ਪੰਜਾਬੀ" },
   ];
 
   const contentTypes = [
