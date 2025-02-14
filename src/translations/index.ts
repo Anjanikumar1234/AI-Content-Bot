@@ -1,3 +1,4 @@
+
 export type TranslationKey =
   | "emailGeneration"
   | "emailDesc"
@@ -91,7 +92,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
   },
   telugu: {
     emailGeneration: "ఇమెయిల్ జనరేషన్",
-    emailDesc: "వృత్తిపరమైన మరియు వ్యక్తిగత ఇమెయిల్‌���ను సృష్టించండి",
+    emailDesc: "వృత్తిపరమైన మరియు వ్యక్తిగత ఇమెయిల్‌లను సృష్టించండి",
     essayWriting: "వ్యాస రచన",
     essayDesc: "బాగా నిర్మించబడిన వ్యాసాలను సృష్టించండి",
     socialMedia: "సోషల్ మీడియా",
@@ -125,13 +126,13 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     essayWriting: "கட்டுரை எழுதுதல்",
     essayDesc: "நன்கு கட்டமைக்கப்பட்ட கட்டுரைகளை உருவாக்குங்கள்",
     socialMedia: "சமூக ஊடகம்",
-    socialDesc: "கவர்ச்சிகரமான சமூக ஊடக உள்��டக்கத்தை உருவாக்குங்கள்",
+    socialDesc: "கவர்ச்சிகரமான சமூக ஊடக உள்ளடக்கத்தை உருவாக்குங்கள்",
     textGeneration: "உரை உருவாக்கம்",
     textDesc: "பல்வேறு வகையான உரை உள்ளடக்கத்தை உருவாக்குங்கள்",
     imageGeneration: "படம் உருவாக்கம்",
     imageDesc: "AI மூலம் அழகான படங்களை உருவாக்குங்கள்",
-    generateContent: "கంటెంట్ ஸృష్టించండి",
-    contentLength: "கంటెంట్ பొడవు",
+    generateContent: "உள்ளடக்கத்தை உருவாக்கு",
+    contentLength: "உள்ளடக்க நீளம்",
     imageStyle: "பட பாணி",
     imageDescription: "பட விளக்கம்",
     selectStyle: "பாணியைத் தேர்ந்தெடுக்கவும்",
@@ -151,7 +152,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
   },
   malayalam: {
     emailGeneration: "ഇമെയിൽ ജനറേഷൻ",
-    emailDesc: "പ്രൊഫഷണലും വ്യക്തിഗതവുമായ ഇമെയിൽുകൾ സൃഷ്ടിക്കുക",
+    emailDesc: "പ്രൊഫഷണലും വ്യക്തിഗതവുമായ ഇമെയിലുകൾ സൃഷ്ടിക്കുക",
     essayWriting: "ഉപന്യാസ രചന",
     essayDesc: "നന്നായി ക്രമീകരിച്ച ഉപന്യാസങ്ങൾ സൃഷ്ടിക്കുക",
     socialMedia: "സോഷ്യൽ മീഡിയ",
@@ -178,6 +179,36 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     successDesc: "നിങ്ങളുടെ ഉള്ളടക്കം സൃഷ്ടിക്കപ്പെട്ടു.",
     contactInfo: "ബന്ധപ്പെടാനുള്ള വിവരങ്ങൾ",
     contactDesc: "ഞങ്ങളുമായി ബന്ധപ്പെടുക",
+  },
+  kannada: {
+    emailGeneration: "ಇಮೇಲ್ ಜನರೇಷನ್",
+    emailDesc: "ವೃತ್ತಿಪರ ಮತ್ತು ವೈಯಕ್ತಿಕ ಇಮೇಲ್‌ಗಳನ್ನು ರಚಿಸಿ",
+    essayWriting: "ಪ್ರಬಂಧ ಬರೆಯುವುದು",
+    essayDesc: "ಚೆನ್ನಾಗಿ ರಚಿಸಲಾದ ಪ್ರಬಂಧಗಳನ್ನು ರಚಿಸಿ",
+    socialMedia: "ಸಾಮಾಜಿಕ ಮಾಧ್ಯಮ",
+    socialDesc: "ಆಕರ್ಷಕ ಸಾಮಾಜಿಕ ಮಾಧ್ಯಮ ವಿಷಯವನ್ನು ರಚಿಸಿ",
+    textGeneration: "ಟೆಕ್ಸ್ಟ್ ಜನರೇಷನ್",
+    textDesc: "ವಿವಿಧ ರೀತಿಯ ಪಠ್ಯ ವಿಷಯವನ್ನು ರಚಿಸಿ",
+    imageGeneration: "ಚಿತ್ರ ಜನರೇಷನ್",
+    imageDesc: "AI ಮೂಲಕ ಸುಂದರವಾದ ಚಿತ್ರಗಳನ್ನು ರಚಿಸಿ",
+    generateContent: "ವಿಷಯ ರಚಿಸಿ",
+    contentLength: "ವಿಷಯದ ಉದ್ದ",
+    imageStyle: "ಚಿತ್ರ ಶೈಲಿ",
+    imageDescription: "ಚಿತ್ರ ವಿವರಣೆ",
+    selectStyle: "ಶೈಲಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    selectLength: "ಉದ್ದವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    enterContent: "ನಿಮ್ಮ ವಿಷಯ ಅಥವಾ ಪ್ರಾಂಪ್ಟ್ ಅನ್ನು ಇಲ್ಲಿ ನಮೂದಿಸಿ...",
+    history: "ಇತಿಹಾಸ",
+    contact: "ಸಂಪರ್ಕ",
+    searchHistory: "ಹುಡುಕಾಟ ಇತಿಹಾಸ",
+    recentRequests: "ನಿಮ್ಮ ಇತ್ತೀಚಿನ ವಿಷಯ ರಚನೆ ವಿನಂತಿಗಳು",
+    selectLanguage: "ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    error: "ದೋಷ",
+    errorDesc: "ವಿಷಯವನ್ನು ರಚಿಸಲು ವಿಫಲವಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    success: "ಯಶಸ್ಸು!",
+    successDesc: "ನಿಮ್ಮ ವಿಷಯ ರಚಿಸಲಾಗಿದೆ.",
+    contactInfo: "ಸಂಪರ್ಕ ಮಾಹಿತಿ",
+    contactDesc: "ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ",
   }
 };
 
