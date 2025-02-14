@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -14,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/translations";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ContentFormProps {
   type: string;
@@ -23,6 +23,7 @@ interface ContentFormProps {
 
 const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
   const t = useTranslation(language);
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     // Common fields
     content: "",
@@ -50,13 +51,86 @@ const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
     additionalDetails: "",
   });
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    // Common validations
+    if (!formData.content) {
+      newErrors.content = "Content is required";
+    }
+
+    if (type !== "image" && !formData.length) {
+      newErrors.length = "Length is required";
+    }
+
+    // Email validations
+    if (type === "email") {
+      if (!formData.senderName) {
+        newErrors.senderName = "Sender's name is required";
+      }
+      if (!formData.receiverName) {
+        newErrors.receiverName = "Receiver's name is required";
+      }
+      if (!formData.tone) {
+        newErrors.tone = "Email tone is required";
+      }
+    }
+
+    // Essay validations
+    if (type === "essay" && !formData.essayType) {
+      newErrors.essayType = "Essay type is required";
+    }
+
+    // Social media validations
+    if (type === "social") {
+      if (!formData.platform) {
+        newErrors.platform = "Platform is required";
+      }
+      if (!formData.style) {
+        newErrors.style = "Content style is required";
+      }
+    }
+
+    // Image validations
+    if (type === "image") {
+      if (!formData.imageStyle) {
+        newErrors.imageStyle = "Image style is required";
+      }
+      if (!formData.resolution) {
+        newErrors.resolution = "Resolution is required";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (name: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error when field is changed
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    
+    if (validateForm()) {
+      onSubmit(formData);
+    } else {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+    }
   };
 
   const renderEmailForm = () => (
@@ -234,7 +308,7 @@ const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
         <div className="space-y-2">
           <Label>{t("contentLength")}</Label>
           <Select onValueChange={(value) => handleChange("length", value)}>
-            <SelectTrigger>
+            <SelectTrigger className={errors.length ? "border-red-500" : ""}>
               <SelectValue placeholder={t("selectLength")} />
             </SelectTrigger>
             <SelectContent>
@@ -244,6 +318,9 @@ const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
               <SelectItem value="extensive">Extensive (800+ words)</SelectItem>
             </SelectContent>
           </Select>
+          {errors.length && (
+            <p className="text-sm text-red-500 mt-1">{errors.length}</p>
+          )}
         </div>
       )}
 
@@ -257,10 +334,15 @@ const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
       <div className="space-y-2">
         <Label>{type === "image" ? t("imageDescription") : "Content"}</Label>
         <Textarea
-          className="min-h-[150px] bg-white/5 border border-white/10 rounded-md p-3 text-white"
+          className={`min-h-[150px] bg-white/5 border rounded-md p-3 text-white ${
+            errors.content ? "border-red-500" : "border-white/10"
+          }`}
           placeholder={t("enterContent")}
           onChange={(e) => handleChange("content", e.target.value)}
         />
+        {errors.content && (
+          <p className="text-sm text-red-500 mt-1">{errors.content}</p>
+        )}
       </div>
 
       <Button type="submit" className="w-full">
