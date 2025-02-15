@@ -11,8 +11,9 @@ export const generateContent = async (prompt: string) => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     console.log('Checking API key...', apiKey ? 'API key exists' : 'No API key found');
     
-    if (!apiKey) {
-      throw new Error('Gemini API key is not configured. Please add your API key in the project settings.');
+    // Additional validation for API key format
+    if (!apiKey || apiKey === 'YOUR-API-KEY-HERE' || !apiKey.startsWith('AIzaSy')) {
+      throw new Error('Invalid Gemini API key format. Please make sure you have added a valid API key in vite.config.ts');
     }
 
     // Initialize the Gemini API
