@@ -9,49 +9,33 @@ const corsHeaders = {
 export const generateContent = async (prompt: string) => {
   try {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    console.log('Checking API key...', apiKey ? 'API key exists' : 'No API key found');
     
     if (!apiKey) {
       throw new Error('Gemini API key is not configured. Please add your API key in the project settings.');
     }
 
     // Initialize the Gemini API
+    console.log('Initializing Gemini API...');
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-    const generationConfig = {
-      temperature: 0.7,
-      topK: 40,
-      topP: 0.8,
-      maxOutputTokens: 1024,
-    };
-
-    const safetySettings = [
-      {
-        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-      },
-      {
-        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-      },
-      {
-        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-      },
-      {
-        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-      },
-    ];
-
+    console.log('Generating content with prompt:', prompt);
+    
     // Start the generation
     const result = await model.generateContent(prompt);
+    console.log('Generation completed, processing response...');
     const response = await result.response;
     const text = response.text();
-
+    
+    console.log('Content generated successfully');
     return text;
   } catch (error) {
-    console.error('Error in generate function:', error);
+    console.error('Detailed error in generate function:', error);
+    if (error instanceof Error) {
+      throw new Error(`Failed to generate content: ${error.message}`);
+    }
     throw error;
   }
 };
+
