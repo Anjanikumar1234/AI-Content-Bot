@@ -19,7 +19,8 @@ export const generateContent = async (prompt: string) => {
     // Initialize the Gemini API
     console.log('Initializing Gemini API...');
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    // Here's where you can change the model name
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });  // Change 'gemini-pro' to your desired model
 
     console.log('Generating content with prompt:', prompt);
     
