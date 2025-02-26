@@ -12,7 +12,7 @@ export const generateContent = async (prompt: string, type: string = 'text') => 
   if (type === 'image') {
     return generateImage(prompt);
   }
-  return generateWithGemini(prompt);
+  return generateWithGemini(prompt, type);
 };
 
 const generateImage = async (prompt: string): Promise<string> => {
@@ -74,7 +74,7 @@ const generateImage = async (prompt: string): Promise<string> => {
   }
 };
 
-const generateWithGemini = async (prompt: string): Promise<string> => {
+const generateWithGemini = async (prompt: string, type: string = 'text'): Promise<string> => {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (!apiKey || apiKey === 'YOUR-API-KEY-HERE' || !apiKey.startsWith('AIzaSy')) {
     throw new Error('Invalid Gemini API key format. Please make sure you have added a valid API key in vite.config.ts');
@@ -83,10 +83,30 @@ const generateWithGemini = async (prompt: string): Promise<string> => {
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-  // Add web search context to the prompt
-  const enhancedPrompt = `Please search the web and provide the most up-to-date information for: ${prompt}\n\nInclude relevant current events and recent developments in your response. If you're unsure about recency, please indicate that in your response.`;
+  // Create type-specific real-time context
+  let enhancedPrompt = '';
+  const currentDate = new Date().toLocaleDateString();
   
-  const result = await model.generateContent(enhancedPrompt);
-  const response = await result.response;
-  return response.text();
+  switch (type) {
+    case 'email':
+      enhancedPrompt = `As of ${currentDate}, write a contextually relevant email that incorporates any recent developments or current events related to: ${prompt}. Include relevant industry trends or news if applicable.`;
+      break;
+    case 'essay':
+      enhancedPrompt = `Write an essay that analyzes ${prompt} with the most up-to-date information as of ${currentDate}. Include recent developments, current statistics, and contemporary examples. If discussing evolving topics, mention the latest trends and changes.`;
+      break;
+    case 'social':
+      enhancedPrompt = `Create a social media post about ${prompt} that's relevant to today (${currentDate}). Include current hashtags, trends, and timely references. Consider ongoing events and recent developments in this field.`;
+      break;
+    default:
+      enhancedPrompt = `Please provide comprehensive, up-to-date information about: ${prompt}\n\nInclude:\n1. Latest developments and current events as of ${currentDate}\n2. Recent statistics and data\n3. Contemporary examples and references\n4. Current trends and future projections\n\nIf any information might not be current, please indicate this in your response.`;
+  }
+
+  try {
+    const result = await model.generateContent(enhancedPrompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error('Error generating content with Gemini:', error);
+    throw new Error('Failed to generate content. Please try again.');
+  }
 };
