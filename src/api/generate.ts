@@ -1,73 +1,80 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+interface RunwareImage {
+  imageURL: string;
+  positivePrompt: string;
+  seed: number;
+  NSFWContent: boolean;
+}
+
+export const generateContent = async (prompt: string, type: string = 'text') => {
+  if (type === 'image') {
+    return generateImage(prompt);
+  }
+  return generateWithGemini(prompt);
 };
 
-export const generateContent = async (prompt: string) => {
+const generateImage = async (prompt: string): Promise<string> => {
   try {
-    // First try Perplexity API
-    const storedApiKey = localStorage.getItem('PERPLEXITY_API_KEY');
+    // First check if we have a stored API key
+    const storedApiKey = localStorage.getItem('RUNWARE_API_KEY');
     
     if (!storedApiKey) {
       // If no API key is stored, ask user to input it
-      const apiKey = window.prompt('Please enter your Perplexity API key (get one for free at https://www.perplexity.ai):');
+      const apiKey = window.prompt('Please enter your Runware API key (get one for free at https://runware.ai/):');
       if (apiKey) {
-        localStorage.setItem('PERPLEXITY_API_KEY', apiKey);
+        localStorage.setItem('RUNWARE_API_KEY', apiKey);
       } else {
-        // Fallback to Gemini if user doesn't provide Perplexity key
-        return generateWithGemini(prompt);
+        throw new Error('Runware API key is required for image generation');
       }
     }
 
-    console.log('Using Perplexity API for real-time responses...');
-    const response = await fetch('https://api.perplexity.ai/chat/completions', {
+    const response = await fetch('https://api.runware.ai/v1', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${storedApiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'llama-3.1-sonar-small-128k-online',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful assistant that provides up-to-date information through real-time web search capabilities.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        temperature: 0.2,
-        top_p: 0.9,
-        max_tokens: 1000,
-        return_images: false,
-        return_related_questions: false,
-        search_domain_filter: ['perplexity.ai'],
-        search_recency_filter: 'month',
-        frequency_penalty: 1,
-        presence_penalty: 0
-      }),
+      body: JSON.stringify([
+        {
+          taskType: 'authentication',
+          apiKey: storedApiKey
+        },
+        {
+          taskType: 'imageInference',
+          taskUUID: crypto.randomUUID(),
+          positivePrompt: prompt,
+          width: 1024,
+          height: 1024,
+          model: 'runware:100@1',
+          numberResults: 1,
+          outputFormat: 'WEBP',
+          CFGScale: 1,
+          scheduler: 'FlowMatchEulerDiscreteScheduler',
+          strength: 0.8,
+        }
+      ])
     });
 
     const data = await response.json();
-    if (data.error) {
-      console.log('Falling back to Gemini due to Perplexity error:', data.error);
-      return generateWithGemini(prompt);
-    }
     
-    return data.choices[0].message.content;
+    if (data.error || data.errors) {
+      throw new Error(data.error || data.errors[0]?.message || 'Failed to generate image');
+    }
+
+    const imageResult = data.data.find((item: any) => item.taskType === 'imageInference');
+    if (!imageResult || !imageResult.imageURL) {
+      throw new Error('No image was generated');
+    }
+
+    return imageResult.imageURL;
   } catch (error) {
-    console.error('Error with Perplexity, falling back to Gemini:', error);
-    return generateWithGemini(prompt);
+    console.error('Error generating image:', error);
+    throw error;
   }
 };
 
-// Fallback function using Gemini
-const generateWithGemini = async (prompt: string) => {
+const generateWithGemini = async (prompt: string): Promise<string> => {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (!apiKey || apiKey === 'YOUR-API-KEY-HERE' || !apiKey.startsWith('AIzaSy')) {
     throw new Error('Invalid Gemini API key format. Please make sure you have added a valid API key in vite.config.ts');
@@ -75,8 +82,10 @@ const generateWithGemini = async (prompt: string) => {
 
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+
+  // Add web search context to the prompt
+  const enhancedPrompt = `Please search the web and provide the most up-to-date information for: ${prompt}\n\nInclude relevant current events and recent developments in your response. If you're unsure about recency, please indicate that in your response.`;
   
-  const enhancedPrompt = `As of June 2023 (Gemini's training cutoff date): ${prompt}`;
   const result = await model.generateContent(enhancedPrompt);
   const response = await result.response;
   return response.text();
