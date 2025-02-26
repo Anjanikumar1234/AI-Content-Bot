@@ -13,7 +13,7 @@ export const generateContent = async (prompt: string) => {
     
     if (!storedApiKey) {
       // If no API key is stored, ask user to input it
-      const apiKey = prompt('Please enter your Perplexity API key (get one for free at https://www.perplexity.ai):');
+      const apiKey = window.prompt('Please enter your Perplexity API key (get one for free at https://www.perplexity.ai):');
       if (apiKey) {
         localStorage.setItem('PERPLEXITY_API_KEY', apiKey);
       } else {
