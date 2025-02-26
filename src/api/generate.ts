@@ -1,5 +1,6 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { supabase } from "@/integrations/supabase/client";
 
 interface RunwareImage {
   imageURL: string;
@@ -17,57 +18,14 @@ export const generateContent = async (prompt: string, type: string = 'text') => 
 
 const generateImage = async (prompt: string): Promise<string> => {
   try {
-    // First check if we have a stored API key
-    const storedApiKey = localStorage.getItem('RUNWARE_API_KEY');
-    
-    if (!storedApiKey) {
-      // If no API key is stored, ask user to input it
-      const apiKey = window.prompt('Please enter your Runware API key (get one for free at https://runware.ai/):');
-      if (apiKey) {
-        localStorage.setItem('RUNWARE_API_KEY', apiKey);
-      } else {
-        throw new Error('Runware API key is required for image generation');
-      }
-    }
-
-    const response = await fetch('https://api.runware.ai/v1', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([
-        {
-          taskType: 'authentication',
-          apiKey: storedApiKey
-        },
-        {
-          taskType: 'imageInference',
-          taskUUID: crypto.randomUUID(),
-          positivePrompt: prompt,
-          width: 1024,
-          height: 1024,
-          model: 'runware:100@1',
-          numberResults: 1,
-          outputFormat: 'WEBP',
-          CFGScale: 1,
-          scheduler: 'FlowMatchEulerDiscreteScheduler',
-          strength: 0.8,
-        }
-      ])
+    const { data, error } = await supabase.functions.invoke('generate-image', {
+      body: { prompt }
     });
 
-    const data = await response.json();
-    
-    if (data.error || data.errors) {
-      throw new Error(data.error || data.errors[0]?.message || 'Failed to generate image');
-    }
+    if (error) throw error;
+    if (!data?.imageUrl) throw new Error('No image URL returned');
 
-    const imageResult = data.data.find((item: any) => item.taskType === 'imageInference');
-    if (!imageResult || !imageResult.imageURL) {
-      throw new Error('No image was generated');
-    }
-
-    return imageResult.imageURL;
+    return data.imageUrl;
   } catch (error) {
     console.error('Error generating image:', error);
     throw error;
