@@ -1,48 +1,43 @@
 
-import { supabase } from "@/integrations/supabase/client";
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 
-interface RunwareImage {
-  imageURL: string;
-  positivePrompt: string;
-  seed: number;
-  NSFWContent: boolean;
-}
-
-export const generateContent = async (prompt: string, type: string = 'text') => {
-  if (type === 'image') {
-    return generateImage(prompt);
-  }
-  return generateText(prompt, type);
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const generateImage = async (prompt: string): Promise<string> => {
+export const generateContent = async (prompt: string) => {
   try {
-    const { data, error } = await supabase.functions.invoke('generate-image', {
-      body: { prompt }
-    });
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    console.log('Checking API key...', apiKey ? 'API key exists' : 'No API key found');
+    
+    // Additional validation for API key format
+    if (!apiKey || apiKey === 'YOUR-API-KEY-HERE' || !apiKey.startsWith('AIzaSy')) {
+      throw new Error('Invalid Gemini API key format. Please make sure you have added a valid API key in vite.config.ts');
+    }
 
-    if (error) throw error;
-    if (!data?.imageUrl) throw new Error('No image URL returned');
+    // Initialize the Gemini API
+    console.log('Initializing Gemini API...');
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-    return data.imageUrl;
+    // Add context about the model's knowledge cutoff date
+    const enhancedPrompt = `As of June 2023 (Gemini's training cutoff date): ${prompt}`;
+    console.log('Generating content with prompt:', enhancedPrompt);
+    
+    // Start the generation
+    const result = await model.generateContent(enhancedPrompt);
+    console.log('Generation completed, processing response...');
+    const response = await result.response;
+    const text = response.text();
+    
+    console.log('Content generated successfully');
+    return text;
   } catch (error) {
-    console.error('Error generating image:', error);
-    throw error;
-  }
-};
-
-const generateText = async (prompt: string, type: string = 'text'): Promise<string> => {
-  try {
-    const { data, error } = await supabase.functions.invoke('generate-text', {
-      body: { prompt, type }
-    });
-
-    if (error) throw error;
-    if (!data?.text) throw new Error('No text content returned');
-
-    return data.text;
-  } catch (error) {
-    console.error('Error generating text:', error);
+    console.error('Detailed error in generate function:', error);
+    if (error instanceof Error) {
+      throw new Error(`Failed to generate content: ${error.message}`);
+    }
     throw error;
   }
 };
