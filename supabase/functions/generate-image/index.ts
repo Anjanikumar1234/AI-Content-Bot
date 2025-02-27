@@ -21,6 +21,11 @@ Deno.serve(async (req) => {
       throw new Error('Prompt is required')
     }
 
+    const apiKey = Deno.env.get('RUNWARE_API_KEY')
+    if (!apiKey) {
+      throw new Error('Runware API key not configured')
+    }
+
     const response = await fetch('https://api.runware.ai/v1', {
       method: 'POST',
       headers: {
@@ -29,7 +34,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify([
         {
           taskType: 'authentication',
-          apiKey: 'nJuJASIiqiDH9XxeZb99jzDAFerUi0c6'
+          apiKey
         },
         {
           taskType: 'imageInference',
