@@ -19,14 +19,13 @@ export const generateContent = async (prompt: string) => {
     // Initialize the Gemini API
     console.log('Initializing Gemini API...');
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    // Here's where you can change the model name
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });  // Change 'gemini-pro' to your desired model
 
-    // Add context about the model's knowledge cutoff date
-    const enhancedPrompt = `As of June 2023 (Gemini's training cutoff date): ${prompt}`;
-    console.log('Generating content with prompt:', enhancedPrompt);
+    console.log('Generating content with prompt:', prompt);
     
     // Start the generation
-    const result = await model.generateContent(enhancedPrompt);
+    const result = await model.generateContent(prompt);
     console.log('Generation completed, processing response...');
     const response = await result.response;
     const text = response.text();
@@ -41,3 +40,4 @@ export const generateContent = async (prompt: string) => {
     throw error;
   }
 };
+
