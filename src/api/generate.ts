@@ -20,7 +20,8 @@ export const generateContent = async (prompt: string) => {
     console.log('Initializing Gemini API...');
     const genAI = new GoogleGenerativeAI(apiKey);
     // Here's where you can change the model name
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });  // Change 'gemini-pro' to your desired model
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });  // Change 'gemini-1.5-flash' to your desired model
+
 
     console.log('Generating content with prompt:', prompt);
     
@@ -28,7 +29,10 @@ export const generateContent = async (prompt: string) => {
     const result = await model.generateContent(prompt);
     console.log('Generation completed, processing response...');
     const response = await result.response;
-    const text = response.text();
+    const text = response.text().replace(/[*]/g, ''); // Remove unnecessary symbols
+    const formattedText = formatGeneratedText(text); // Format the output
+    return formattedText;
+
     
     console.log('Content generated successfully');
     return text;
@@ -41,3 +45,36 @@ export const generateContent = async (prompt: string) => {
   }
 };
 
+// Function to format the generated text
+const formatGeneratedText = (text) => {
+    // Add relevant emojis and structure the text
+    const emojiMapping = {
+        "happy": "😊",
+        "sad": "😢",
+        "love": "❤️",
+        "success": "🎉",
+        "warning": "⚠️",
+        "info": "ℹ️",
+        "question": "❓",
+        "idea": "💡",
+        "rocket": "🚀",
+        "check": "✅",
+        "cross": "❌",
+        "data": "📊",
+        "compare": "🔄",
+        "explain": "📝",
+        "alert": "🚨",
+        "note": "🗒️",
+    };
+
+    // Example logic to select an emoji based on the content
+    let selectedEmoji = "ℹ️"; // Default emoji
+    if (text.includes("compare")) {
+        selectedEmoji = emojiMapping["compare"];
+    } else if (text.includes("data")) {
+        selectedEmoji = emojiMapping["data"];
+    } else if (text.includes("success")) {
+        selectedEmoji = emojiMapping["success"];
+    }
+    return `${selectedEmoji} ${text.trim()}`; // Neatly structure the output
+};
