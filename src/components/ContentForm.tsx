@@ -49,6 +49,8 @@ const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
     imageStyle: "realistic",
     resolution: "medium",
     additionalDetails: "",
+    clearDescription: true,
+
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -101,7 +103,11 @@ const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
       if (!formData.resolution) {
         newErrors.resolution = "Resolution is required";
       }
+      if (!formData.clearDescription) {
+        newErrors.clearDescription = "Clear description is required";
+      }
     }
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -332,7 +338,8 @@ const ContentForm = ({ type, onSubmit, language }: ContentFormProps) => {
 
       {/* Common content/prompt field */}
       <div className="space-y-2">
-        <Label>{type === "image" ? t("imageDescription") : "Content"}</Label>
+    <Label>{type === "image" ? t("clearDescription") : "Content"}</Label>
+
         <Textarea
           className={`min-h-[150px] bg-white/5 border rounded-md p-3 text-white ${
             errors.content ? "border-red-500" : "border-white/10"

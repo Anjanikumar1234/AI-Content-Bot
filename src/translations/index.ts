@@ -26,7 +26,9 @@ export type TranslationKey =
   | "success"
   | "successDesc"
   | "contactInfo"
-  | "contactDesc";
+  | "contactDesc"
+  | "clearDescription"; // Added new translation key for clear description
+
 
 export const translations: Record<string, Record<TranslationKey, string>> = {
   english: {
@@ -40,6 +42,9 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     textDesc: "Generate various types of text content",
     imageGeneration: "Image Generation",
     imageDesc: "Create stunning AI-generated images",
+    clearDescription: "Please provide a clear and detailed description.",
+
+
     generateContent: "Generate Content",
     contentLength: "Content Length",
     imageStyle: "Image Style",
@@ -70,6 +75,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     textDesc: "विभिन्न प्रकार की टेक्स्ट सामग्री बनाएं",
     imageGeneration: "छवि जनरेशन",
     imageDesc: "AI द्वारा बनाई गई आकर्षक छवियां बनाएं",
+    clearDescription: "कृपया स्पष्ट और विस्तृत विवरण प्रदान करें।",
+
     generateContent: "सामग्री बनाएं",
     contentLength: "सामग्री की लंबाई",
     imageStyle: "छवि शैली",
@@ -100,6 +107,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     textDesc: "వివిధ రకాల టెక్స్ట్ కంటెంట్‌ను సృష్టించండి",
     imageGeneration: "చిత్ర జనరేషన్",
     imageDesc: "AI తో అద్భుతమైన చిత్రాలను సృష్టించండి",
+    clearDescription: "దయచేసి స్పష్టమైన మరియు వివరమైన వివరణను అందించండి.",
+
     generateContent: "కంటెంట్ సృష్టించండి",
     contentLength: "కంటెంట్ పొడవు",
     imageStyle: "చిత్రం శైలి",
@@ -130,6 +139,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     textDesc: "பல்வேறு வகையான உரை உள்ளடக்கத்தை உருவாக்குங்கள்",
     imageGeneration: "படம் உருவாக்கம்",
     imageDesc: "AI மூலம் அழகான படங்களை உருவாக்குங்கள்",
+    clearDescription: "தயவுசெய்து தெளிவான மற்றும் விரிவான விளக்கத்தை வழங்கவும்.",
+
     generateContent: "உள்ளடக்கத்தை உருவாக்கு",
     contentLength: "உள்ளடக்க நீளம்",
     imageStyle: "பட பாணி",
@@ -160,6 +171,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     textDesc: "വിവിധ തരം ടെക്സ്റ്റ് ഉള്ളടക്കം സൃഷ്ടിക്കുക",
     imageGeneration: "ചിത്ര ജനറേഷൻ",
     imageDesc: "AI ഉപയോഗിച്ച് മനോഹരമായ ചിത്രങ്ങൾ സൃഷ്ടിക്കുക",
+    clearDescription: "ദയവായി മനോഹരമായ ചിത്രങ്ങൾ സൃഷ്ടിക്കാൻ സഹായിക്കുന്ന വിശദമായ വിവരണം നൽകുക.",
+
     generateContent: "ഉള്ളടക്കം സൃഷ്ടിക്കുക",
     contentLength: "ഉള്ളടക്ക ദൈർഘ്യം",
     imageStyle: "ചിത്ര ശൈലി",
@@ -190,6 +203,8 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     textDesc: "ವಿವಿಧ ರೀತಿಯ ಪಠ್ಯ ವಿಷಯವನ್ನು ರಚಿಸಿ",
     imageGeneration: "ಚಿತ್ರ ಜನರೇಷನ್",
     imageDesc: "AI ಮೂಲಕ ಸುಂದರವಾದ ಚಿತ್ರಗಳನ್ನು ರಚಿಸಿ",
+    clearDescription: "ದಯವಿಟ್ಟು ಸ್ಪಷ್ಟ ಮತ್ತು ವಿವರವಾದ ವಿವರಣೆಯನ್ನು ಒದಗಿಸಿ.",
+
     generateContent: "ವಿಷಯ ರಚಿಸಿ",
     contentLength: "ವಿಷಯದ ಉದ್ದ",
     imageStyle: "ಚಿತ್ರ ಶೈಲಿ",
