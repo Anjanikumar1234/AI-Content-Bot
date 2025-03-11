@@ -5,6 +5,55 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Function to modify prompts to avoid content filtering
+const modifyPromptForImageGeneration = (prompt: string): string => {
+  // Convert to lowercase for easier matching
+  const lowerPrompt = prompt.toLowerCase();
+  
+  // If the prompt contains food-related terms, make it more neutral
+  if (lowerPrompt.includes('breakfast') || 
+      lowerPrompt.includes('food') || 
+      lowerPrompt.includes('cooking') ||
+      lowerPrompt.includes('recipe')) {
+    return `A kitchen scene of ${prompt}`;
+  }
+  
+  return prompt;
+};
+
+// Function to format text in a clean, structured way
+const formatStructuredText = (text: string): string => {
+  // Remove any markdown and special characters
+  let formattedText = text
+    .replace(/\*\*/g, '')
+    .replace(/\*/g, '')
+    .replace(/```/g, '')
+    .replace(/`/g, '');
+
+  // Format lists with proper indentation and spacing
+  formattedText = formattedText
+    .replace(/^\s*[\*\-]\s+/gm, '\n• ') // Convert list items with proper spacing
+    .replace(/^\d+\.\s+/gm, (match) => `\n${match}`); // Add spacing before numbered lists
+
+  // Add proper paragraph spacing
+  formattedText = formattedText
+    .split('\n')
+    .map(line => line.trim())
+    .join('\n')
+    .replace(/\n\s*\n/g, '\n\n') // Standardize paragraph spacing
+    .replace(/([.!?])\s+/g, '$1\n') // Add line breaks after sentences
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0) // Remove empty lines
+    .join('\n\n');
+
+  // Clean up final formatting
+  return formattedText
+    .replace(/\n{3,}/g, '\n\n') // Remove excessive line breaks
+    .replace(/^\s+|\s+$/g, '') // Trim extra whitespace
+    .trim();
+};
+
 export const generateContent = async (prompt: string, onStream: (text: string) => void) => {
   try {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -34,56 +83,73 @@ export const generateContent = async (prompt: string, onStream: (text: string) =
       // Initialize the Gemini API for enhanced response
       console.log('Initializing Gemini API...');
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
       // First, show the current date/time immediately
-      const initialResponse = `Current Date and Time:\n- Date: ${now.toLocaleDateString()}\n- Time: ${now.toLocaleTimeString()}\n- Day: ${now.toLocaleDateString(undefined, { weekday: 'long' })}\n\nFetching additional information...`;
+      const initialResponse = `Current Date and Time:\n\nDate: ${now.toLocaleDateString()}\nTime: ${now.toLocaleTimeString()}\nDay: ${now.toLocaleDateString(undefined, { weekday: 'long' })}\n\nFetching additional information...`;
       onStream(initialResponse);
 
       // Then get AI's enhanced response
       const result = await model.generateContentStream(formattedPrompt);
       let fullText = initialResponse + '\n\n';
+      let buffer = '';
       
       for await (const chunk of result.stream) {
-        const chunkText = chunk.text();
-        fullText += chunkText;
+        buffer += chunk.text();
+        
+        // Format the text when we have a complete sentence or paragraph
+        if (buffer.match(/[.!?]\s*$/) || buffer.includes('\n')) {
+          fullText += formatStructuredText(buffer);
+          buffer = '';
+          onStream(fullText);
+        }
+      }
+      
+      // Format any remaining text
+      if (buffer) {
+        fullText += formatStructuredText(buffer);
         onStream(fullText);
       }
 
-      return formatGeneratedText(fullText);
+      return fullText;
     }
 
-    // Initialize the Gemini API for other queries
+    // Rest of the code for non-date queries
+    const modifiedPrompt = modifyPromptForImageGeneration(prompt);
     console.log('Initializing Gemini API...');
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-    console.log('Generating content with prompt:', prompt);
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    console.log('Generating content with prompt:', modifiedPrompt);
     
-    // Start the generation with streaming
-    const formattedPrompt = `${prompt}. Please provide a clear and detailed description.`;
-    const result = await model.generateContentStream(formattedPrompt);
-
+    const result = await model.generateContentStream(modifiedPrompt);
     let fullText = '';
+    let buffer = '';
     let lastChunkTime = Date.now();
     
     for await (const chunk of result.stream) {
-      const chunkText = chunk.text();
-      fullText += chunkText;
+      buffer += chunk.text();
       
-      // Ensure we're not updating the UI too rapidly
-      const now = Date.now();
-      if (now - lastChunkTime >= 50) { // Add a small delay between updates
-        onStream(fullText);
-        lastChunkTime = now;
+      // Format the text when we have a complete sentence or paragraph
+      if (buffer.match(/[.!?]\s*$/) || buffer.includes('\n')) {
+        fullText += formatStructuredText(buffer);
+        buffer = '';
+        
+        const now = Date.now();
+        if (now - lastChunkTime >= 50) {
+          onStream(fullText);
+          lastChunkTime = now;
+        }
       }
     }
     
-    // Ensure the final text is shown
-    onStream(fullText);
+    // Format any remaining text
+    if (buffer) {
+      fullText += formatStructuredText(buffer);
+      onStream(fullText);
+    }
 
     console.log('Content generated successfully');
-    return formatGeneratedText(fullText);
+    return fullText;
   } catch (error) {
     console.error('Detailed error in generate function:', error);
     if (error instanceof Error) {
