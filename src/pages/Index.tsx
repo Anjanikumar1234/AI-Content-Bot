@@ -5,7 +5,7 @@ import ContentForm from "@/components/ContentForm";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { generateContent } from "@/api/generate";
+import { generateContent, generateImageDescription } from "@/api/generate";
 import {
   Select,
   SelectContent,
@@ -112,10 +112,16 @@ const Index = () => {
     try {
       const prompt = generatePrompt(selectedType!, data);
       
-      // Pass a callback to handle streaming updates
-      await generateContent(prompt, (streamedText) => {
-        setGeneratedContent(streamedText);
-      });
+      // Use generateImageDescription for image requests, generateContent for others
+      if (selectedType === "image") {
+        await generateImageDescription(prompt, (streamedText) => {
+          setGeneratedContent(streamedText);
+        });
+      } else {
+        await generateContent(prompt, (streamedText) => {
+          setGeneratedContent(streamedText);
+        });
+      }
       
       setSearchHistory(prev => [...prev, {
         type: selectedType!,
@@ -358,7 +364,9 @@ const Index = () => {
                       </div>
                     ) : generatedContent ? (
                       <div className="bg-white/5 p-4 rounded-lg min-h-[200px] whitespace-pre-wrap text-white/90">
-                        {generatedContent}
+                        {generatedContent.split('\n\n').map((paragraph, index) => (
+                          <p key={index} className="mb-4">{paragraph}</p>
+                        ))}
                       </div>
                     ) : (
                       <div className="text-center text-white/60 min-h-[200px] flex items-center justify-center">
