@@ -111,8 +111,11 @@ const Index = () => {
     
     try {
       const prompt = generatePrompt(selectedType!, data);
-      const content = await generateContent(prompt);
-      setGeneratedContent(content);
+      
+      // Pass a callback to handle streaming updates
+      await generateContent(prompt, (streamedText) => {
+        setGeneratedContent(streamedText);
+      });
       
       setSearchHistory(prev => [...prev, {
         type: selectedType!,
