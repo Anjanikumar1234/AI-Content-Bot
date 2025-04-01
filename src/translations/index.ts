@@ -41,7 +41,7 @@ export const translations: Record<string, Record<TranslationKey, string>> = {
     textGeneration: "Text Generation",
     textDesc: "Generate various types of text content",
     imageGeneration: "Image Generation",
-    imageDesc: "Create stunning AI-generated images",
+    imageDesc: "Create stunning AI-generated images descriptions",
     clearDescription: "Please provide a clear and detailed description.",
 
 
